@@ -1,0 +1,1143 @@
+openapi: 3.0.0
+info:
+  title: DeepThought_NudgeAPI by Manish Kumar Panda
+  contact: {}
+  version: '1.0'
+servers:
+# - url: http://localhost:5000/api/v3/app
+- url: https://deepthought-nudge-api.onrender.com/
+  variables: {}
+paths:
+  /eventCategory:
+    post:
+      tags:
+      - EventType
+      summary: Create Event Type
+      operationId: CreateEventType
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateEventTypeRequest'
+              - example:
+                  name: ''
+            example:
+              name: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - EventType
+      summary: Get All Event Types
+      operationId: GetAllEventTypes
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /eventCategory/{id}:
+    get:
+      tags:
+      - EventType
+      summary: Get EventType By Id
+      operationId: GetEventTypeById
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+    put:
+      tags:
+      - EventType
+      summary: Update EventType
+      operationId: UpdateEventType
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateEventTypeRequest'
+              - example:
+                  name: ''
+            example:
+              name: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /events:
+    get:
+      tags:
+      - Events
+      summary: Get All Events
+      operationId: GetAllEvents
+      parameters:
+      - name: id
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      - name: page
+        in: query
+        description: ''
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+    post:
+      tags:
+      - Events
+      summary: Create Event
+      operationId: CreateEvent
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateEventRequest'
+              - example:
+                  category: 6478391d3e6c3f6a30160321
+                  subcategory: 647839533e6c3f6a30160325
+                  name: Python For Beginners
+                  user: 64777fd68377a1a50d06f9a3
+                  moderator: 647839b63e6c3f6a3016032b
+                  rigor_rank: 9
+                  attendees:
+                  - 647780518377a1a50d06f9a8
+                  - 64777fd68377a1a50d06f9a3
+                  imageUrl: dfsdsfsfds
+                  description: Code with harry teaches python really well. With practical coding exercises, you can learn and be fluent in all concepts in Python.
+                  scheduled:
+                  - on: 2023-10-08
+                    from: 2023-10-08 9:00:00
+                    to: 2023-10-08 13:00:00
+                  tagline: Python is future. Learn it now.
+            example:
+              category: 6478391d3e6c3f6a30160321
+              subcategory: 647839533e6c3f6a30160325
+              name: Python For Beginners
+              user: 64777fd68377a1a50d06f9a3
+              moderator: 647839b63e6c3f6a3016032b
+              rigor_rank: 9
+              attendees:
+              - 647780518377a1a50d06f9a8
+              - 64777fd68377a1a50d06f9a3
+              imageUrl: dfsdsfsfds
+              description: Code with harry teaches python really well. With practical coding exercises, you can learn and be fluent in all concepts in Python.
+              scheduled:
+              - on: 2023-10-08
+                from: 2023-10-08 9:00:00
+                to: 2023-10-08 13:00:00
+              tagline: Python is future. Learn it now.
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /events/{id}:
+    put:
+      tags:
+      - Events
+      summary: Update Event
+      description: try 64783a7e3e6c3f6a30160330
+      operationId: UpdateEvent
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateEventRequest'
+              - example:
+                  category: 6478391d3e6c3f6a30160321
+                  subcategory: 647839533e6c3f6a30160325
+                  name: Python For Beginners
+                  user: 64777fd68377a1a50d06f9a3
+                  moderator: 647839b63e6c3f6a3016032b
+                  rigor_rank: 9
+                  attendees:
+                  - 647780518377a1a50d06f9a8
+                  - 64777fd68377a1a50d06f9a3
+                  imageUrl: ''
+                  description: Code with harry teaches python really well. With practical coding exercises, you can learn and be fluent in all concepts in Python.
+                  scheduled:
+                  - on: 2023-10-08
+                    from: 2023-10-08 9:00:00
+                    to: 2023-10-08 13:00:00
+                  tagline: Python is future. Learn it now.
+            example:
+              category: 6478391d3e6c3f6a30160321
+              subcategory: 647839533e6c3f6a30160325
+              name: Python For Beginners
+              user: 64777fd68377a1a50d06f9a3
+              moderator: 647839b63e6c3f6a3016032b
+              rigor_rank: 9
+              attendees:
+              - 647780518377a1a50d06f9a8
+              - 64777fd68377a1a50d06f9a3
+              imageUrl: ''
+              description: Code with harry teaches python really well. With practical coding exercises, you can learn and be fluent in all concepts in Python.
+              scheduled:
+              - on: 2023-10-08
+                from: 2023-10-08 9:00:00
+                to: 2023-10-08 13:00:00
+              tagline: Python is future. Learn it now.
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+      - Events
+      summary: Delete Event
+      operationId: DeleteEvent
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /images/{id}/upload-image:
+    put:
+      tags:
+      - Events
+      summary: Update Event Image
+      description: 64783a7e3e6c3f6a30160330
+      operationId: UpdateEventImage
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding: {}
+            schema:
+              required:
+              - image
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+        required: false
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /images/upload-image:
+    post:
+      tags:
+      - Events
+      summary: Add Event Image
+      operationId: AddEventImage
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding: {}
+            schema:
+              required:
+              - image
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+        required: false
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /users:
+    post:
+      tags:
+      - User
+      summary: Create User
+      operationId: CreateUser
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateUserRequest'
+              - example:
+                  name: ''
+                  role: attendee
+            example:
+              name: ''
+              role: attendee
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - User
+      summary: Get All Users
+      operationId: GetAllUsers
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /users/{id}:
+    put:
+      tags:
+      - User
+      summary: Update User
+      operationId: UpdateUser
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateUserRequest'
+              - example:
+                  name: ''
+                  role: attendee
+            example:
+              name: ''
+              role: attendee
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+      - User
+      summary: Delete User
+      operationId: DeleteUser
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /:
+    get:
+      tags:
+      - User
+      summary: Get User by Id
+      operationId: GetUserbyId
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /subCategory:
+    post:
+      tags:
+      - SubCategory
+      summary: Create SubCategory
+      operationId: CreateSubCategory
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateSubCategoryRequest'
+              - example:
+                  name: ''
+                  parentCategory: ''
+            example:
+              name: ''
+              parentCategory: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - SubCategory
+      summary: Get All SubCategories
+      operationId: GetAllSubCategories
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /subCategory/{id}:
+    put:
+      tags:
+      - SubCategory
+      summary: Update SubCategory
+      operationId: UpdateSubCategory
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateSubCategoryRequest'
+              - example:
+                  name: ''
+                  parentCategory: ''
+            example:
+              name: ''
+              parentCategory: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+      - SubCategory
+      summary: Delete SubCategory
+      operationId: DeleteSubCategory
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - SubCategory
+      summary: Get Single Subcategory
+      operationId: GetSingleSubcategory
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /nudge:
+    post:
+      tags:
+      - Nudge
+      summary: Create Nudge
+      operationId: CreateNudge
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateNudgeRequest'
+              - example:
+                  eventCategoryId: ''
+                  eventId: ''
+                  title: ''
+                  icon: ''
+                  scheduled:
+                  - on: 2025-08-11
+                    from: 2025-08-11 9:00:00
+                    to: 2025-08-11 13:00:00
+                  coverImage: ''
+                  invitationLine: ''
+            example:
+              eventCategoryId: ''
+              eventId: ''
+              title: ''
+              icon: ''
+              scheduled:
+              - on: 2025-08-11
+                from: 2025-08-11 9:00:00
+                to: 2025-08-11 13:00:00
+              coverImage: ''
+              invitationLine: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - Nudge
+      summary: Get All Nudges
+      operationId: GetAllNudges
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /nudge/{id}:
+    put:
+      tags:
+      - Nudge
+      summary: Update Nudge
+      description: 'try this id : 6477b922a6dce41d2b0a0c31'
+      operationId: UpdateNudge
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateNudgeRequest'
+              - example:
+                  eventCategoryId: ''
+                  eventId: ''
+                  title: ''
+                  icon: ''
+                  scheduledOn: ''
+                  scheduledFrom: ''
+                  scheduledTo: ''
+                  coverImage: ''
+                  invitationLine: ''
+            example:
+              eventCategoryId: ''
+              eventId: ''
+              title: ''
+              icon: ''
+              scheduledOn: ''
+              scheduledFrom: ''
+              scheduledTo: ''
+              coverImage: ''
+              invitationLine: ''
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    delete:
+      tags:
+      - Nudge
+      summary: Delete Nudge
+      description: deleting any nudge will remove the nudge from database & you might need to change default values in other endpoints in order to search for existing nudges
+      operationId: DeleteNudge
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+    get:
+      tags:
+      - Nudge
+      summary: Get Single Nudge By Id
+      operationId: GetSingleNudgeById
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /nudge/upload-image:
+    post:
+      tags:
+      - Nudge
+      summary: Upload Nudge Cover Image
+      operationId: UploadNudgeCoverImage
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding: {}
+            schema:
+              required:
+              - image
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+        required: false
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /nudge/image/{id}/upload-image:
+    put:
+      tags:
+      - Nudge
+      summary: Update Uploaded Nudge Image Cover
+      operationId: UpdateUploadedNudgeImageCover
+      parameters:
+      - name: id
+        in: path
+        description: ''
+        required: true
+        style: simple
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            encoding: {}
+            schema:
+              required:
+              - image
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+        required: false
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /auth/register:
+    post:
+      tags:
+      - Auth
+      summary: Register
+      operationId: Register
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/RegisterRequest'
+              - example:
+                  name: Super User
+                  email: superuser123@gmail.com
+                  password: wrongpassword
+            example:
+              name: Super User
+              email: superuser123@gmail.com
+              password: wrongpassword
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      summary: Login
+      operationId: Login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/LoginRequest'
+              - example:
+                  email: superuser123@gmail.com
+                  password: please-enter-password
+            example:
+              email: superuser123@gmail.com
+              password: please-enter-password
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+components:
+  schemas:
+    CreateEventTypeRequest:
+      title: CreateEventTypeRequest
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: ''
+    UpdateEventTypeRequest:
+      title: UpdateEventTypeRequest
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+      example:
+        name: ''
+    CreateEventRequest:
+      title: CreateEventRequest
+      required:
+      - category
+      - subcategory
+      - name
+      - user
+      - moderator
+      - rigor_rank
+      - attendees
+      - imageUrl
+      - description
+      - scheduled
+      - tagline
+      type: object
+      properties:
+        category:
+          type: string
+        subcategory:
+          type: string
+        name:
+          type: string
+        user:
+          type: string
+        moderator:
+          type: string
+        rigor_rank:
+          type: integer
+          format: int32
+        attendees:
+          type: array
+          items:
+            type: string
+          description: ''
+        imageUrl:
+          type: string
+        description:
+          type: string
+        scheduled:
+          type: array
+          items:
+            $ref: '#/components/schemas/Scheduled'
+          description: ''
+        tagline:
+          type: string
+      example:
+        category: 6478391d3e6c3f6a30160321
+        subcategory: 647839533e6c3f6a30160325
+        name: Python For Beginners
+        user: 64777fd68377a1a50d06f9a3
+        moderator: 647839b63e6c3f6a3016032b
+        rigor_rank: 9
+        attendees:
+        - 647780518377a1a50d06f9a8
+        - 64777fd68377a1a50d06f9a3
+        imageUrl: dfsdsfsfds
+        description: Code with harry teaches python really well. With practical coding exercises, you can learn and be fluent in all concepts in Python.
+        scheduled:
+        - on: 2023-10-08
+          from: 2023-10-08 9:00:00
+          to: 2023-10-08 13:00:00
+        tagline: Python is future. Learn it now.
+    Scheduled:
+      title: Scheduled
+      required:
+      - on
+      - from
+      - to
+      type: object
+      properties:
+        on:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+      example:
+        on: 2023-10-08
+        from: 2023-10-08 9:00:00
+        to: 2023-10-08 13:00:00
+    UpdateEventRequest:
+      title: UpdateEventRequest
+      required:
+      - category
+      - subcategory
+      - name
+      - user
+      - moderator
+      - rigor_rank
+      - attendees
+      - imageUrl
+      - description
+      - scheduled
+      - tagline
+      type: object
+      properties:
+        category:
+          type: string
+        subcategory:
+          type: string
+        name:
+          type: string
+        user:
+          type: string
+        moderator:
+          type: string
+        rigor_rank:
+          type: integer
+          format: int32
+        attendees:
+          type: array
+          items:
+            type: string
+          description: ''
+        imageUrl:
+          type: string
+        description:
+          type: string
+        scheduled:
+          type: array
+          items:
+            $ref: '#/components/schemas/Scheduled'
+          description: ''
+        tagline:
+          type: string
+      example:
+        category: 6478391d3e6c3f6a30160321
+        subcategory: 647839533e6c3f6a30160325
+        name: Python For Beginners
+        user: 64777fd68377a1a50d06f9a3
+        moderator: 647839b63e6c3f6a3016032b
+        rigor_rank: 9
+        attendees:
+        - 647780518377a1a50d06f9a8
+        - 64777fd68377a1a50d06f9a3
+        imageUrl: ''
+        description: Code with harry teaches python really well. With practical coding exercises, you can learn and be fluent in all concepts in Python.
+        scheduled:
+        - on: 2023-10-08
+          from: 2023-10-08 9:00:00
+          to: 2023-10-08 13:00:00
+        tagline: Python is future. Learn it now.
+    CreateUserRequest:
+      title: CreateUserRequest
+      required:
+      - name
+      - role
+      type: object
+      properties:
+        name:
+          type: string
+        role:
+          type: string
+      example:
+        name: ''
+        role: attendee
+    UpdateUserRequest:
+      title: UpdateUserRequest
+      required:
+      - name
+      - role
+      type: object
+      properties:
+        name:
+          type: string
+        role:
+          type: string
+      example:
+        name: ''
+        role: attendee
+    CreateSubCategoryRequest:
+      title: CreateSubCategoryRequest
+      required:
+      - name
+      - parentCategory
+      type: object
+      properties:
+        name:
+          type: string
+        parentCategory:
+          type: string
+      example:
+        name: ''
+        parentCategory: ''
+    UpdateSubCategoryRequest:
+      title: UpdateSubCategoryRequest
+      required:
+      - name
+      - parentCategory
+      type: object
+      properties:
+        name:
+          type: string
+        parentCategory:
+          type: string
+      example:
+        name: ''
+        parentCategory: ''
+    CreateNudgeRequest:
+      title: CreateNudgeRequest
+      required:
+      - eventCategoryId
+      - eventId
+      - title
+      - icon
+      - scheduled
+      - coverImage
+      - invitationLine
+      type: object
+      properties:
+        eventCategoryId:
+          type: string
+        eventId:
+          type: string
+        title:
+          type: string
+        icon:
+          type: string
+        scheduled:
+          type: array
+          items:
+            $ref: '#/components/schemas/Scheduled'
+          description: ''
+        coverImage:
+          type: string
+        invitationLine:
+          type: string
+      example:
+        eventCategoryId: ''
+        eventId: ''
+        title: ''
+        icon: ''
+        scheduled:
+        - on: 2025-08-11
+          from: 2025-08-11 9:00:00
+          to: 2025-08-11 13:00:00
+        coverImage: ''
+        invitationLine: ''
+    UpdateNudgeRequest:
+      title: UpdateNudgeRequest
+      required:
+      - eventCategoryId
+      - eventId
+      - title
+      - icon
+      - scheduledOn
+      - scheduledFrom
+      - scheduledTo
+      - coverImage
+      - invitationLine
+      type: object
+      properties:
+        eventCategoryId:
+          type: string
+        eventId:
+          type: string
+        title:
+          type: string
+        icon:
+          type: string
+        scheduledOn:
+          type: string
+        scheduledFrom:
+          type: string
+        scheduledTo:
+          type: string
+        coverImage:
+          type: string
+        invitationLine:
+          type: string
+      example:
+        eventCategoryId: ''
+        eventId: ''
+        title: ''
+        icon: ''
+        scheduledOn: ''
+        scheduledFrom: ''
+        scheduledTo: ''
+        coverImage: ''
+        invitationLine: ''
+    RegisterRequest:
+      title: RegisterRequest
+      required:
+      - name
+      - email
+      - password
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        name: Super User
+        email: superuser123@gmail.com
+        password: wrongpassword
+    LoginRequest:
+      title: LoginRequest
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: superuser123@gmail.com
+        password: please-enter-password
+  securitySchemes:
+    httpBearer:
+      type: http
+      scheme: bearer
+security:
+- httpBearer: []
+tags:
+- name: EventType
+- name: Events
+- name: User
+- name: SubCategory
+- name: Nudge
+- name: Auth

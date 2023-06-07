@@ -10,96 +10,61 @@ const EventType = require('../models/eventTypeModel')
 const Nudge = require('../models/nudgeModel')
 const cloudinaryConfig = require('../config/cloudinaryConfig.js');
 const authMiddleware = require('../middlewares/authMiddleware');
+const pool = require('../mysql-config/mysql-credentials');
+
+
+// i have done things the brute force way because I have not taken any course on Udemy that uses NodeJs +MYSQL
+
+// I did things in a not-so-messy way in nodeJs + mongoDB because I have taken courses that teach how to do things in a standard way in MERN stack
 
 router.get('/',async(req,res)=>{
-    try {
-        // fetching a single event by query string
-        // this will get a single event by id 
-        if(req.query.id){
-            try {
-                const event = await Event.findOne({_id:req.query.id})
-                .populate("moderator")
-                .populate("category")
-                .populate("subcategory")
-                .populate("attendees")
 
-            return res.status(200).json({data:event,success:true})
-        } catch (error) {
-                return res.status(500).json({message:error.message,success:false})
+    const result = await pool.query("select * from events")
+    
+    
+    for(var i =0;i<result[0].length;i++){
+        // https://stackoverflow.com/questions/48652138/mysql-storing-ids-as-an-array-in-a-table
+
+        // used this above link to understand how to do this in mysql
+        let attendeesResult =  await pool.query(`select attendee_id from attendees where event_id=${result[0][i]?.id} `)
+        const SubCategoryJoin = await pool.query(`select * from subcategory`)
+        const categoryJoin = await pool.query(`select * from subcategory`)
+        const moderatorQuery = await pool.query(`select * from users where role='moderator'`)
+
+        result[0][i].attendees = attendeesResult[0]
+        result[0][i].subcategory = SubCategoryJoin[0].map((singleCategory)=>{
+            console.log(singleCategory.id,result[0][i].subcategory)
+            if(singleCategory.id===result[0][i].subcategory){
+                return singleCategory.name
             }
-        }
-
-
-        if(req.query.type && !req.query.limit && !req.query.page){
-            try {
-                const events = await Event.find({}).sort('-createdAt')
-                .populate("moderator")
-                .populate("category")
-                .populate("subcategory")
-                .populate("attendees")
-
-                return res.status(200).json({data:events,success:true})
-            } catch (error) {
-               return res.status(500).json({message:error.messsage,success:false})
+            else{
+                return
             }
-        }
-       
-     
-        // when limit is passed in the query string but not the type
-        if(req.query.limit){
-            
-            try {
-            let events;
-            const page = Number(req.query.page) || 1
-            const limit = Number(req.query.limit) || 2
+            // https://stackoverflow.com/questions/2132030/remove-null-values-from-javascript-array
+            // i wanted to remove null values because I did not want empty indexes with nothing in them
+        }).filter(function(val) { return val !== null; }).join("")
 
-            const skip = (page - 1) * limit
-
-           
-            events = await Event.find({})
-            .populate("moderator")
-            .populate("category")
-            .populate("subcategory")
-            .populate("attendees")
-            .skip(skip)
-            .limit(limit)
-
-            // there are fewer chances of errors when the url does not have the type query parameter
-            // handle the type querystring once the pagination feature works
-            // this provides greater flexibility while passing querystrings in the url
-
-            if(req.query.type==='latest'){
-                events = await Event.find({})
-                .populate("moderator")
-                .populate("category")
-                .populate("subcategory")
-                .populate("attendees")
-                .skip(skip)
-                .limit(limit)
-                .sort('-createdAt')
+        result[0][i].moderator = moderatorQuery[0].map((singleModerator)=>{
+            console.log(singleModerator.id,result[0][i].subcategory)
+            if(singleModerator.id===result[0][i].moderator){
+                return singleModerator.name
             }
-                
+            else{
+                return
+            }
+            // https://stackoverflow.com/questions/2132030/remove-null-values-from-javascript-array
+            // i wanted to remove null values because I did not want empty indexes with nothing in them
+        }).filter(function(val) { return val !== null; }).join("")
+        
 
-            // send an additional key of count to the frontend to verify that limit actually works
-                const numberOfResults = events.length
-                
-                return res.status(200).json({data:events,success:true,count:numberOfResults})
-            
-           } catch (error) {
-           return res.status(500).json({message:error.message,success:false})
-           }
-        }
-       
-        const events = await Event.find({})
-        .populate("moderator")
-        .populate("category")
-        .populate("subcategory")
-        .populate("attendees")
-        res.status(200).json({data:events,count:events.length,success:true})
-    } catch (error) {
-        res.status(500).json({message:error.message,success:false})
-    }
+     }
+
+     res.send(result[0])
 })
+
+
+
+
 
 router.get('/all',async(req,res)=>{
     try {

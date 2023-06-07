@@ -29,18 +29,20 @@ app.get('/random',async(req,res)=>{
         
    // in mysql version of events & nudge api, it is not so easy to just assign an array to a key in the object
    // i am doing a nested loop here.
-   
+
    // this has taken more than 2 hours atleast. forEach method did not work
 
    // i am loving mysql more than ever. data consistency feels so easy here.
-
+    // after linking two tables, there comes a dropdown box when we insert data in mysql using phpMyAdmin.
+    
 
    // after two hours of trying, I finally suceeded in generating a json response the way I wanted.
 
+   //this code happened in flow state. it is 2:44AM. I am overflowing with gratitude :))
      for(var i =0;i<result[0].length;i++){
 
-        //this code happened in flow state. it is 2:44AM. I am overflowing with gratitude :))
         let attendeesResult =  await pool.query(`select attendee_id from attendees where event_id=${result[0][i]?.id} `)
+       
         result[0][i].attendees = attendeesResult[0]
 
      }

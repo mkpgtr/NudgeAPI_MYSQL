@@ -19,7 +19,8 @@ const pool = require('../mysql-config/mysql-credentials');
 
 router.get('/',async(req,res)=>{
 
-    let {id,limit,page,type} = req.query
+    try {
+        let {id,limit,page,type} = req.query
     console.log(req.query)
     console.log(req.query)
     
@@ -123,6 +124,7 @@ router.get('/',async(req,res)=>{
       return  res.json(result[0])
     }
 
+    let result = await pool.query('select * from events')
     // when there are no query params
     
     for(var i =0;i<result[0].length;i++){
@@ -163,6 +165,44 @@ router.get('/',async(req,res)=>{
      }
 
      res.send(result[0])
+    } catch (error) {
+        res.status(500).json({error:error.message})
+    }
+})
+
+router.post('/',async(req,res)=>{
+
+   try {
+    console.log(req.body)
+    const {category,attendees,subcategory,moderator,name,rigor_rank,timingsFrom,timingsTo,imageURL,tagline}=req.body;
+
+
+    const result = await pool.query('insert into events (category,subcategory,moderator,name,rigor_rank,timingsFrom,timingsTo,imageURL,tagline) values (?,?,?,?,?,?,?,?,?)',[category,subcategory,moderator,name,rigor_rank,timingsFrom,timingsTo,imageURL,tagline])
+
+    // console.log(result[0])
+
+   const lastAddedId = result[0].insertId
+//  once we add an event, we get its id and then we iterate over each element in the attendees array
+// and on each iteration we add to the attendees table event_id & attendee
+// let's say we have 3 attendees, then the loop will run three times and insert each attendee into the attendees table.
+
+// i am very happy that I was able to think through this without ChatGPT but the idea came from stackoverflow when I was searching for how to insert an array into into mysql.
+
+// it said that we don't insert array. instead we create a separate table an store event_id & attendee id.
+// which represents which attendee is going to which event
+
+// for the sake of easier testing of this code, I am not checking whether moderators can attend the event or only attendee can attend the event. I am allowing everyone to attend the event.
+
+// so if you see moderator's id in attendee list, just know that it was done for easier testing purposes
+    for(let i=0;i<attendees.length;i++){
+        await pool.query(`insert into attendees (event_id,attendee_id) values(?,?)`,[lastAddedId,attendees[i]])
+    }
+
+
+    res.send({id:result[0].insertId})
+   } catch (error) {
+    res.json({message:error.message})
+   }
 })
 
 

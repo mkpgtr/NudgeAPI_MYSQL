@@ -5,7 +5,6 @@ const router = require('express').Router()
 const mongoose = require('mongoose')
 const {Types: {ObjectId}} = mongoose;
 const cloudinaryConfig = require('../config/cloudinaryConfig.js');
-const authMiddleware = require('../middlewares/authMiddleware');
 const pool = require('../mysql-config/mysql-credentials');
 
 

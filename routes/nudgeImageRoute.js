@@ -3,7 +3,6 @@ const router = require('express').Router()
 const multer = require('multer')
 
 const cloudinaryConfig = require('../config/cloudinaryConfig.js');
-const authMiddleware = require('../middlewares/authMiddleware');
 const pool = require('../mysql-config/mysql-credentials.js');
 
 const storage = multer.diskStorage({

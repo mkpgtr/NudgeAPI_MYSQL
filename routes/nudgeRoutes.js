@@ -1,5 +1,4 @@
 const router = require('express').Router()
-const authMiddleware = require('../middlewares/authMiddleware.js')
 const cloudinaryConfig = require('../config/cloudinaryConfig.js');
 const pool = require('../mysql-config/mysql-credentials.js');
 

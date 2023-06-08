@@ -91,4 +91,4 @@
 
 7. These are just my beliefs & how I see things. I will not want to waste anyone's time during live-interviews with these long lines(because I'm very nervous) so I am just saying these things here in my GITHUB readme. I hope I find someone who understands my excitement & guides me on how to write reusable code. 
 
-8. But why I want to write my reusbale code? The ability to write reusable code can help me build my own libraries & frameworks.
+8. But why I want to write my reusbale code? The ability to write reusable code can help me build my own libraries & frameworks. I might be wrong. But I asked chatGPT to verify whether reusable code is essential and it said yes and explained why. So if you disagree, please email me at : mkpgtr@gmail.com and I will explore with an open-mind the roadmap which you provide.

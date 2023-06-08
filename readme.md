@@ -72,25 +72,3 @@
 4. I also found out that if we try creating relationships between table rows with inconsistent data types then we will get an error. This took a lot of my time while I was starting out.
 
 ============================================================================
-
-
-
-### Why am I excited about small things?
-
-1. When I can build something using deductive logic, there joy is unparalleled. This API might not be a great thing for a lot of people and that's okay. But it is immensely great for me because I am learning to connect the dots. I have grown emotionally fonder of this API & I don't know why.
-
-2. When I will be able to connect the dots well, I will be able to model any real world design in database and programming logic. 
-
-3. I have not found anyone on youtube who teaches, how to imagine an idea, note it down on paper & then transform the plan into code. If you find it, please email me on :mkpgtr@gmail.com
-
-4. Building small things with attention to detail, help me reach conclusions which are reusbale. That's why I am excited about small programs and concepts. They enlighten me. 
-
-5. Being from a non-CS background, I guess my brain has not registered & associated the boring feelings to interesting concepts. Most of my friends I know & meet are not interested in OOPs concepts & UML Diagrams OR Entity Relationships Diagrams. Some of them told me that they were taught these subjects only to pass the exam so they never investigated it much. I have one friend who acknowledged the importance of these topics & explained me how they design APIs for their organisation & how different people are involved & that great things are always built in a collaborative & innovative environment. 
-
-6. It's very important to be able to use pre-written libraries because they make our development process faster. But being able to write reusable code is far more joyful. Analogy : It is easy to play a tune which is already composed. You know the chords because you have searched on Google. You can play that song in live shows & people will clap for you. But when you attempt to compose an original song that is as beautiful, you need to study hard(prodigies AND geniuses excluded) OR experiment intensely. That's the same with computer science also.
-
-7. These are just my beliefs & how I see things. I will not want to waste anyone's time during live-interviews with these long lines(because I'm very nervous) so I am just saying these things here in my GITHUB readme. I hope I find someone who understands my excitement & guides me on how to write reusable code. 
-
-8. But why I want to write my reusbale code? The ability to write reusable code can help me build my own libraries & frameworks. I might be wrong. But I asked chatGPT to verify whether reusable code is essential and it said yes and explained why. So if you disagree, please email me at : mkpgtr@gmail.com and I will explore with an open-mind the roadmap which you provide.
-
-9. A lot of my opinions are beliefs are not tested in real-life work situations yet. My opinions & beliefs may be lopsided & sometimes outrightly impractical. I realized that I sometimes get misunderstood regarding reusable code. I would like to mention that : I am not in favor of re-inventing the wheel. Our ancestors have found & written solutions to common problems & I would prefer to use those solutions instead of attempting to derive them from scratch. I would never find it an interesting endeavor(at least at this point of time) to write my own Laravel framework. But I surely would love it if I can contribute to the Laravel project.

@@ -81,7 +81,7 @@
 
 2. When I will be able to connect the dots well, I will be able to model any real world design in database and programming logic. 
 
-3. No one youtube teaches, how to imagine an idea, note it down on paper & then transform the plan into code.
+3. I have not found anyone on youtube who teaches, how to imagine an idea, note it down on paper & then transform the plan into code. If you find it, please email me on :mkpgtr@gmail.com
 
 4. Building small things with attention to detail, help me reach conclusions which are reusbale. That's why I am excited about small programs and concepts. They enlighten me. 
 

@@ -8,13 +8,6 @@ const cloudinaryConfig = require('../config/cloudinaryConfig.js');
 
 router.get('/',async(req,res)=>{
  
-    try {
-        const nudges = await Nudge.find({})
-        res.status(200).json({data:nudges,success:true})
-
-    } catch (error) {
-        res.status(500).json({message:error.message,success:false})
-    }
 })
 
 //get single nudge

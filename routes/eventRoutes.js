@@ -256,7 +256,13 @@ router.put('/:id',async(req,res)=>{
 
 router.delete('/:id',async(req,res)=>{
     try {
-        
+        const {id} = req.params
+        const eventExists = await pool.query(`select * from events where id=?`,[id])
+        if(!eventExists[0].length > 0){
+            return res.status(404).json({message:"no such event exists"})
+        }
+        const result = await pool.query(`delete from events where id=?`,[id])
+        res.status(200).json({message:"Event Deleted Succcessfully"})
     } catch (error) {
         res.status(500).json({message:error.message})
     }

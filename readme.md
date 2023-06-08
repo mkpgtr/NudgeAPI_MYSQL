@@ -89,6 +89,6 @@
 
 6. It's very important to be able to use pre-written libraries because they make our development process faster. But being able to write reusable code is far more joyful. Analogy : It is easy to play a tune which is already composed. You know the chords because you have searched on Google. You can play that song in live shows & people will clap for you. But when you attempt to compose an original song that is as beautiful, you need to study hard(prodigies AND geniuses excluded) OR experiment intensely. That's the same with computer science also.
 
-7. These are just my beliefs & how I see things. I will not want to waste anyone's time during live-interviews with these long lines so I am just saying these things here in my GITHUB readme. I hope I find someone who understands my excitement & guides me on how to write reusable code. 
+7. These are just my beliefs & how I see things. I will not want to waste anyone's time during live-interviews with these long lines(because I'm very nervous) so I am just saying these things here in my GITHUB readme. I hope I find someone who understands my excitement & guides me on how to write reusable code. 
 
 8. But why I want to write my reusbale code? The ability to write reusable code can help me build my own libraries & frameworks.

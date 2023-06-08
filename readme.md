@@ -2,7 +2,7 @@
 
 1. Almost 90% MYSQL code is inside the routes/eventRoutes.js
 2. I will repeat the same process in other routes
-3. That's why I uploaded this code to explain my thought process regarding how I am converting mongoose(mongodb) code to mysql2(mysql)
+3. That's why I uploaded this old code along with the new one (in routes/eventRoutes.js) to explain my thought process regarding how I am converting mongoose(mongodb) code to mysql2(mysql).  
 4. So most of the recent changes I have made are inside routes/eventRoutes.js
 5. I have tried to be as open as possible while writing comments because that will give the evaluator an accurate idea of my thought process & why I am doing things a certain way. 
 6. And it will also help the evaluator in knowing which level I am currently at.

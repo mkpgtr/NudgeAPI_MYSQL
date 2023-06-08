@@ -14,7 +14,6 @@ const userRoutes = require('./routes/userRoutes.js')
 const eventRoutes = require('./routes/eventRoutes.js')
 const eventImageRoute = require('./routes/eventImageRoute.js')
 const nudgeImageRoutes = require('./routes/nudgeImageRoute.js')
-const authRoutes= require('./routes/authRoutes')
 const base_url = 'api/v3/app'
 const pool = require('./mysql-config/mysql-credentials.js')
 const cors = require('cors')
@@ -36,7 +35,6 @@ app.use(xss())
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.use(`/${base_url}/auth`,authRoutes)
 app.use(`/${base_url}/events`,eventRoutes)
 app.use(`/${base_url}/nudge`,nudgeRoutes)
 app.use(`/${base_url}/nudge/image`,nudgeImageRoutes)

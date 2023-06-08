@@ -47,7 +47,7 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
         const url = previousImage[0][0].imageURL.startsWith('https:')
 
         if(!url){
-            return res.status(400).json({message:"no image is present in the database already"})
+            return res.status(400).json({message:"no image is present in the database already. please upload it via upload route & update the event's imageURL through the update event ROUTE"})
         }
     
         const getPublicId = (imageUrl) => imageUrl.split("/").pop().split(".")[0];

@@ -54,6 +54,8 @@ router.put('/:id',async(req,res)=>{
     try {
         
         const {name,role} = req.body
+
+
         if(!name || !role){
             return res.status(403).json({message:'empty values are not allowed'})
         }
@@ -61,6 +63,10 @@ router.put('/:id',async(req,res)=>{
 
 
         const userAlreadyPresent = await pool.query(`select * from users where id=?`,[id])
+
+        if(!userAlreadyPresent){
+            return res.status(404).json({message:"No such user exists"})
+        }
         const updateUser = await pool.query(`update users set name=?,role=? where id=${id}`,[name ? name : userAlreadyPresent[0].name, role ? role : userAlreadyPresent[0].role])
         console.log(userAlreadyPresent[0])
 

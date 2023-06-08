@@ -24,6 +24,10 @@ router.get('/',async(req,res)=>{
     if(id && !limit && !page && !type){
         const result = await pool.query('select * from events where id = ?',[id])
 
+        if(!result[0].length > 0){
+            return res.status(404).json({message:"No events found"})
+        }
+
         for(var i =0;i<result[0].length;i++){
             // https://stackoverflow.com/questions/48652138/mysql-storing-ids-as-an-array-in-a-table
     
@@ -121,6 +125,10 @@ router.get('/',async(req,res)=>{
     }
 
     let result = await pool.query('select * from events')
+
+    if(!result[0].length > 0){
+        return res.status(404).json({message:"No events found"})
+    }
     // when there are no query params
     
     for(var i =0;i<result[0].length;i++){

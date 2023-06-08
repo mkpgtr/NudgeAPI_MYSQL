@@ -4,6 +4,7 @@ const multer = require('multer')
 
 const cloudinaryConfig = require('../config/cloudinaryConfig.js');
 const authMiddleware = require('../middlewares/authMiddleware');
+const pool = require('../mysql-config/mysql-credentials.js');
 
 const storage = multer.diskStorage({
     filename:(req,file,cb)=>{
@@ -12,7 +13,7 @@ const storage = multer.diskStorage({
 });
 
 
-router.post('/upload-image',authMiddleware,multer({storage}).single('image'), async(req,res)=>{
+router.post('/upload-image',multer({storage}).single('image'), async(req,res)=>{
     try {
         const response = await cloudinaryConfig.uploader.upload(req.file.path,
             {
@@ -27,16 +28,19 @@ router.post('/upload-image',authMiddleware,multer({storage}).single('image'), as
     }
 })
 
-router.put('/:id/upload-image',authMiddleware,multer({storage}).single('image'),async(req,res)=>{
+router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=>{
 
  
 
     try {
         const {id} = req.params;
 
-        const event = await Nudge.findOne({_id:id})
+        const alreadyExistingImage = await pool.query('select * from nudges where id=?',[id])
+        const url = alreadyExistingImage[0][0].coverImage
 
-        const url = event.coverImage
+        if(!url.startsWith('https')){
+            return res.status(404).json({message:"image not found. please try uploading image via post route"})
+        }
     
         const getPublicId = (imageUrl) => imageUrl.split("/").pop().split(".")[0];
 
@@ -50,7 +54,7 @@ router.put('/:id/upload-image',authMiddleware,multer({storage}).single('image'),
 
             const imageUrl = response.secure_url;
 
-        await Nudge.findByIdAndUpdate(id,{coverImage:imageUrl})
+            const result = await pool.query('update nudges set coverImage=? where id=?',[imageUrl,id])
             res.status(200).json({message:"image updated successfully",data:imageUrl,success:true})
     } catch (error) {
         res.status(500).json({message:error.message,success:false})

@@ -1,4 +1,0 @@
-Task 1 : https://github.com/mkpgtr/DeepThought_NudgeAPI
-    Task 1 Video Link(Event Creation Process) : https://drive.google.com/file/d/1ENchv1flTSV19FaA4cnmBP2DbiivgQdY/view
-    (the scheduled field in nudge & event schema finally evolved. while recording this video the scheduled field has a different structure than the current structure )
-    Task 1 Video Link(Pagination & Search By Id) : https://drive.google.com/file/d/1DG4Zrnhlgg4r2o85atL-DfO-ZXj-tTkh/view

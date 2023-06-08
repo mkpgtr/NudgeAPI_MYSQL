@@ -1,4 +1,3 @@
-const authMiddleware = require('../middlewares/authMiddleware.js')
 const pool = require('../mysql-config/mysql-credentials.js')
 
 const router = require('express').Router()
@@ -18,7 +17,7 @@ router.post('/',async(req,res)=>{
 
 // get all users
 
-router.get('/',authMiddleware,async(req,res)=>{
+router.get('/',async(req,res)=>{
 
    
 })
@@ -37,6 +36,17 @@ router.put('/:id',async(req,res)=>{
 
 router.delete('/:id',async(req,res)=>{
     
+    try {
+        const {id} = req.params
+        const userExists = await pool.query(`select * from users where id = ?`,[id])
+        if(!userExists){
+            return res.status(404).json({message:'user not found.'})
+        }
+        const result = await pool.query(`delete from users where id =${id}`)
+        res.status(200).json({message:'user deleted successfully'})
+    } catch (error) {
+        res.json({message:error.message})
+    }
   
 })
 

@@ -1,6 +1,5 @@
 const router = require('express').Router()
 
-const Nudge = require('../models/nudgeModel')
 const multer = require('multer')
 
 const cloudinaryConfig = require('../config/cloudinaryConfig.js');

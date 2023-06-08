@@ -4,10 +4,6 @@ const router = require('express').Router()
 
 const mongoose = require('mongoose')
 const {Types: {ObjectId}} = mongoose;
-const Event = require('../models/eventModel')
-const SubCategory = require('../models/subCategory')
-const EventType = require('../models/eventTypeModel')
-const Nudge = require('../models/nudgeModel')
 const cloudinaryConfig = require('../config/cloudinaryConfig.js');
 const authMiddleware = require('../middlewares/authMiddleware');
 const pool = require('../mysql-config/mysql-credentials');
@@ -206,118 +202,67 @@ router.post('/',async(req,res)=>{
 })
 
 
-
-
-
-
-
-// router.get('/all',async(req,res)=>{
-//     try {
-//         const events = await Event.find({})
-//         .populate("moderator")
-//         res.status(200).json({data:events,success:true})
-//     } catch (error) {
-//         res.status(500).json({message:error.message,success:false})
-//     }
-// })
-
-
-
-// create event
-
-// router.post('/',authMiddleware,async(req,res)=>{
-//     try {
-//         // first find the sub category & parent cateogory of the event accordingly
-
-
-//         const subcategory = await SubCategory.findOne({_id:req.body.subcategory})
-//         if(!subcategory){
-//             return res.status(404).json({message:"No such category found",success:false})
-//         }
-//         const subcategoryParentId = subcategory.parentCategory._id; 
-//         const categoryId = await EventType.findOne({_id:req.body.category})
-
-//         // when the parent & subcategory details mismatch, then throw an error
-//         if(categoryId._id.valueOf()!==subcategoryParentId.valueOf()){
-//             return res.status(400).json({message:'inconsistent category & subcategory hierarchy',success:false})
-//         }
-//         // if all goes well, create the event
-//        const event = await Event.create(req.body);
-//         res.status(200).json({data:event._id,message:'Event created Successfully', success:true})
-//     } catch (error) {
-//         res.status(500).json({message:error.message, success:false})
-        
-//     }
-// })
-
-
-
-
-// router.get('/',async(req,res)=>{
-
+router.put('/:id',async(req,res)=>{
+    try {
+        const {id} = req.params;
+        const {category,attendees,subcategory,moderator,name,rigor_rank,timingsFrom,timingsTo,imageURL,tagline}=req.body;
     
-//     try {
-//         if(!ObjectId.isValid(req.query.id)){
-//             return res.status(404).json({message:"please enter a valid event id",success:false})
-//         }
-//         const event = await Event.findOne({_id:req.query.id})
-//         .populate("event")
-//         .populate("moderator")
+        // find if the event already exists or not
 
-//         if(!event){
-//             return res.status(404).json({message:"no such event found",success:false})
-//         }
-//         res.status(200).json({data : event, success:true})
-//     } catch (error) {
-//         res.status(500).json({message:error.message, success:false})
-        
-//     }
-// })
-
-// // update an event
-
-// router.put('/:id',authMiddleware,async(req,res)=>{
-
-//     try {
-//         const event = await Event.findOne({_id:req.params.id})
-//         if(!event){
-//             return res.status(404).json({message:"no such event exists",success:false})
-//         }
-        
-//         await Event.findByIdAndUpdate(req.params.id,{...req.body,imageUrl:event.imageUrl})
-//         res.status(200).json({message:"Event updated Successfully",success:true})
-//     } catch (error) {
-//         res.status(500).json({message:error.message,success:false})
-//     }
-// })
-
-// // delete an event
-
-// router.delete('/:id',authMiddleware,async(req,res)=>{
+        const resultExists = await pool.query(`select * from events where id = ?`,[id])
+        if(!resultExists[0].length > 0){
+            return res.status(404).json({message:"No such event exists"})
+        }
     
-//     try {
-//         const {id} = req.params
-//         const event = await Event.findOne({_id:id})
-//         if(!event){
-//             return res.status(400).json({message:"No such event exists",success:false})
-//         }
-
-//         const url = event.imageUrl
+        const result = await pool.query(`update events set category=?, subcategory=?,moderator=?,name=?,rigor_rank=?,timingsFrom=?,timingsTo=?,imageURL=?,tagline=? where id=${id}`,[category ? category : resultExists[0][0].category,subcategory ? subcategory : resultExists[0][0].subcategory,moderator ? moderator : resultExists[0][0].moderator,name ? name :resultExists[0][0].name,rigor_rank ? rigor_rank : resultExists[0][0].rigor_rank,timingsFrom ? timingsFrom : resultExists[0][0].timingsFrom,timingsTo ? timingsTo : resultExists[0][0].timingsTo,imageURL ? imageURL : resultExists[0][0].imageURL,tagline ? tagline : resultExists[0][0].tagline])
     
-//         const getPublicId = (imageUrl) => imageUrl.split("/").pop().split(".")[0];
+        console.log(attendees)
+    
+
+    //  once we add an event, we get its id and then we iterate over each element in the attendees array
+    // and on each iteration we add to the attendees table event_id & attendee
+    // let's say we have 3 attendees, then the loop will run three times and insert each attendee into the attendees table.
+    
+    // i am very happy that I was able to think through this without ChatGPT but the idea came from stackoverflow when I was searching for how to insert an array into into mysql.
+    
+    // it said that we don't insert array. instead we create a separate table an store event_id & attendee id.
+    // which represents which attendee is going to which event
+    
+    // for the sake of easier testing of this code, I am not checking whether moderators can attend the event or only attendee can attend the event. I am allowing everyone to attend the event.
 
 
-//         // first delete the image related to that event
-//         const isDeleted = await cloudinaryConfig.uploader.destroy(`deepthought-events/`+getPublicId(url))
+    if(attendees.length > 0){
+        // when the user wants to update attendees, the attendees array length will be greater than 0
 
+        // first delete all attendees  that belong to this ID
+        await pool.query(`delete from attendees where event_id=?`,[id])
+        for(let i=0;i<attendees.length;i++){
+            
+            await pool.query(`insert into attendees (event_id,attendee_id) values(?,?)`,[id,attendees[i]])
+        }
+    }else{
+        // if the user passes an empty array, then delete all the attendees from that event
+        await pool.query(`delete from attendees where event_id=?`,[id])
+    }
+    // so if you see moderator's id in attendee list, just know that it was done for easier testing purposes
        
-//         // then delete the event itself by id
-//         await Event.findByIdAndDelete(req.params.id)
-//         res.status(200).json({message:"Event deleted Successfully",success:true})
-//     } catch (error) {
-//         res.status(500).json({message:error.message,success:false})
+    
+    
+        res.send({id:result[0].insertId, message:"event updated successfully"})
+       } catch (error) {
+        res.json({message:error.message})
+       }
+})
+
+router.delete('/:id',async(req,res)=>{
+    try {
         
-//     }
-// })
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+})
+
+
+
 
 module.exports = router

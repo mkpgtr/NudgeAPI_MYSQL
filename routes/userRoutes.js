@@ -1,5 +1,4 @@
 const authMiddleware = require('../middlewares/authMiddleware.js')
-const User = require('../models/userModel.js')
 const pool = require('../mysql-config/mysql-credentials.js')
 
 const router = require('express').Router()

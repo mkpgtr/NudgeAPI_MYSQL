@@ -1,9 +1,8 @@
 const router = require('express').Router()
 const authMiddleware = require('../middlewares/authMiddleware.js')
-const EventType = require('../models/eventTypeModel.js')
 
 
-router.post('/',authMiddleware,async(req,res)=>{
+router.post('/',async(req,res)=>{
 
 
     try {

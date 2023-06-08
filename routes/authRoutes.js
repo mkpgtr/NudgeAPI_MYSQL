@@ -1,7 +1,6 @@
 
 
 
-const User = require('../models/superUserModel.js')
 
 const router = require('express').Router()
 

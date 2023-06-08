@@ -1,129 +1,94 @@
+### Important Note :
+
+1. Almost 90% MYSQL code is inside the routes/eventRoutes.js
+2. I will repeat the same process in other routes
+3. That's why I uploaded this code to explain my thought process regarding how I am converting mongoose(mongodb) code to mysql2(mysql)
+4. So most of the recent changes I have made are inside routes/eventRoutes.js
+5. I have tried to be as open as possible while writing comments because that will give the evaluator an accurate idea of my thought process & why I am doing things a certain way. 
+6. And it will also help the evaluator in knowing which level I am currently at.
+
+### Important Screenshots :
+
+1. Pagination & Type=latest  : https://res.cloudinary.com/dvfpxjjk1/image/upload/v1686205997/pagination_correct_uuabo4.png
+
+2. POST EVENT : https://res.cloudinary.com/dvfpxjjk1/image/upload/v1686205818/postEVENT_vesxjn.png
+
+3. Search event by ID : https://res.cloudinary.com/dvfpxjjk1/image/upload/v1686205814/searchByID_u33ryx.png
+
+4. Events Table : https://res.cloudinary.com/dvfpxjjk1/image/upload/v1686206280/a_glimpse_of_my_EVENTS_TABLE_fow82q.png
+
+5. users table : https://res.cloudinary.com/dvfpxjjk1/image/upload/v1686206600/usersTABLE_invjtm.png
+
+6. subcategory table : https://res.cloudinary.com/dvfpxjjk1/image/upload/v1686206602/SUBCATEGORYTABLE_zi3ls8.png
+
+7. atendees table : https://res.cloudinary.com/dvfpxjjk1/image/upload/v1686206587/attendeesTABLE_uq3bjy.png
+
+8. NUDGE TABLE : https://res.cloudinary.com/dvfpxjjk1/image/upload/v1686206596/NUDGE_TABLE_lubxyp.png
+### Features :
+
+1. Add An Event
+2. Get All Events
+3. Get An Event By ID
+4. Pagination & Sort Recent Posts
+
+### Features pending(work in progress):
+
+1. CRUD regarding NUDGES
+2. Upload & Update photo
+3. Update event & Delete Event
+
+### Features that I missed :
+1. uid column in the event table, will add it later once I am done with other more important things related to NUDGES & image uploading. 
+
+**without phpmyadmin this would not have been possible. The GUI(Graphical User Interface) helped me visualize solutions in terms of tables(instead of mongodb Document Objects)**
+
+
+### Challenges faced & solved :
+
+(a bit of background)
+
+1. I was nervous about converting MongoDB + mongoose code to mysql.
+2. The reason was : my mongodb + mongoose version had a lot of parent-child/nested kind of relationship.
+    My mongoose code had a lot of populate function & I had never done that thing with MYSQL.
+3. Fortunately, I was able to recall from my past php + mysql training & apply that knowledge to solve this problem(although the solutions are brute force solutions[at least they feel like brute force solutions])
+4. Running nested loops in a recurring pattern in this project & I have used it everywhere.
+5. The code is not clean.
+6. I will still be pushing code for other routes that are stll pending. 
+
+(the challenges which I overcame)
+
+1. How to define relationships between tables in mysql.
+2. how to send array from the frontend & store the attendees on a different table with two columns(event_id & attendee_id). (how to store attendees for an event)
+ 3. how to update only certain fields. I ran into terrible problems like updating the entire table with one value.
+ 
+### New things I learnt while building this assignment:
+
+1. In mongodb, I did not know how to remove children documents when the parent gets removed. This was the reason why I was not able to delete replies to the comments which themselves were replies to some other comment(in my social media API, i was able to remove comments only level deep[and that too with lots of nested looping & unclean code]). In MYSQL, there is a feature called CASCADE on Delete. It is such a powerful feature. It deletes rows from the child table when the parent table rows are deleted.
+
+2. Although, the work in under progress, I tested this concept in PHPMYADMIN. For a NUDGE to exist, there must be an event(otherwise what is there to NUDGE about?). So when the EVENT is deleted, the NUDGE will also be deleted. Makes sense right! I achieved this while adding the foreign key to my NUDGE table that was reffering to the EVENT ID. I enabled, CASCADE on DELETE & it worked so beautifully.
+
+3. I also discovered that UNCHECKING(disabling) the ENABLE FOREIGN KEY CHECKS does not throw an error when we delete parent rows & this might lead to inconsistent data.
+
+4. I also found out that if we try creating relationships between table rows with inconsistent data types then we will get an error. This took a lot of my time while I was starting out.
+
+============================================================================
 
 
 
-# Deepthought_NudgeAPI
+### Why am I excited about small things?
 
+1. When I can build something using deductive logic, there joy is unparalleled. This API might not be a great thing for a lot of people and that's okay. But it is immensely great for me because I am learning to connect the dots. I have grown emotionally fonder of this API & I don't know why.
 
-## Solutions Links :
+2. When I will be able to connect the dots well, I will be able to model any real world design in database and programming logic. 
 
-#### Important Note : 
-0. THis project will not work without the credentials in the .env file. The .env file includes
-    mongo_url,JWT_SECRET,CLOUD_NAME (which refers to cloudinary cloud name), CLOUD_API_KEY, and 
-    CLOUD_API_SECRET
-1. I have planned & designed & coded this API without any external help(except for Swagger Documentation).
-2. Creating Swagger Documentation was new for me. 
-3. I rely on my github code &  video recordings to explain every functionality during interview round.
-4. I have tried and tested the endpoints and they work absolutely fine using Postman. 
-If things break(or if some inconsistent status codes are shown[silly mistakes]) in the Swagger Documentation, then it must be some configuration error.
-5. I have built everything myself.
-6. To run the swagger documention on localhost:5000, comment out the render link on line number 7 
-    and uncomment the the line number 6 in swagger.yaml file. restart the node server and visit
-    http://localhost:5000/api/v3/app/api-docs/#
-Links : 
+3. No one youtube teaches, how to imagine an idea, note it down on paper & then transform the plan into code.
 
-### Task 1
+4. Building small things with attention to detail, help me reach conclusions which are reusbale. That's why I am excited about small programs and concepts. They enlighten me. 
 
-1. Task 1 : https://github.com/mkpgtr/DeepThought_NudgeAPI
-    Task 1 Video Link(Event Creation Process) : https://drive.google.com/file/d/1ENchv1flTSV19FaA4cnmBP2DbiivgQdY/view
-    (the scheduled field in nudge & event schema finally evolved. while recording this video the scheduled field has a different structure than the current structure )
-    Task 1 Video Link(Pagination & Search By Id) : https://drive.google.com/file/d/1DG4Zrnhlgg4r2o85atL-DfO-ZXj-tTkh/view
+5. Being from a non-CS background, I guess my brain has not registered & associated the boring feelings to interesting concepts. Most of my friends I know & meet are not interested in OOPs concepts & UML Diagrams OR Entity Relationships Diagrams.
 
+6. It's very important to be able to use pre-written libraries because they make our development process faster. But being able to write reusable code is far more joyful. Analogy : It is easy to play a tune which is already composed. You know the chords because you have searched on Google. You can play that song in live shows & people will clap for you. But when you attempt to compose an original song that is as beautiful, you need to study hard(prodigies AND geniuses excluded) OR experiment intensely. That's the same with computer science also.
 
-(A json formatter is recommended to actually clearly see this on the browser like so : https://res.cloudinary.com/dvfpxjjk1/image/upload/v1685611902/jsonformatsss_opvud7.png )
-Please also have a look at : https://deepthought-nudge-api.onrender.com/api/v3/app/events
-and 
-also this : https://deepthought-nudge-api.onrender.com/api/v3/app/events?id=64783a7e3e6c3f6a30160330
+7. These are just my beliefs & how I see things. I will not want to waste anyone's time during live-interviews with these long lines so I am just saying these things here in my GITHUB readme. I hope I find someone who understands my excitement & guides me on how to write reusable code. 
 
-For pagination & recent posts : https://deepthought-nudge-api.onrender.com/api/v3/app/events?type=latest&page=1&limit=5
-
-### Task 2
-
-2. Task 2 :https://deepthought-nudge-api.onrender.com/api-docs/#/
-
-    (See the Nudge Section by visiting this above link)
-    (I have also explained my thought process about Nudges in this readme.md also)
-    
-     >(this link takes some time to load(approx one minute) as it is deployed on a free server)
-
-
-
-    (this api is password protected for create & delete operations, I will send the password in google
-    form for assignment submission
-    )
-
-
-Deepthought Nudge API is an API that assists in creating annoucements(nudges) for events. Designed & built by Manish Kumar Panda as part of an assignment task for Deepthought. The API uses different Schemas to model Events. Once an Event is created, A Nudge can be created about it. 
-
-
-## Features
-
-- Create Events based on EventTypes & Sub Categories
-- Assign moderators & attendees for a particular event
-- Upload images for the Event and Nudge and store them on cloud
-- Easily create Nudges(annoucements) with an icon, tagline,schedule,etc.
-- Create new users and assign them a specific role
-- Authentication system in place to prohibit access
-- Error handling to maintain stability & data integrity 
-- API Documentation written in swagger & deployed on Render
-- Pagination feature along with sorting functionality for latest events
-- Create, Read, Update & Delete an Event along with their images
-- Create, Read, Update & Delete a Nudge along with their images
-- The API can be consumed easily by frontend developers to perform CRUD operations.
-
-
-### Deepthought_NudgeAPI revolves around Events & Nudges.
-
-
-
-
-##### Some important points about Events:
-1. An Event is made up(composed) of EventType(parent),SubCategory(of Event i.e child)
-2. Attendees(who attend the event) & Moderators who host the Event
-3. User(who is entering the Event data into database)
-4. Rigor rank(regarding the rigor of the event).
- Assumption with an Example : An event about machine learning model optimization(rigor_rank:9) is more rigorous than an event on making hot/cold coffee(rigor_rank:5) provided that company deals in machine learning projects(an not in coffee) and any mistake in that area might cost the company a lot.
-6. scheduled date & time of the event(stored as type:Date in Event Schema)
-7. Tagline(that is a witty line for that event)
-
-##### Some important points about Nudges(and how I made sense of it):
-
-Assume there are Events already Scheduled in February. Now, invitations(Nudges) must be sent
-prior to one week(or more) to make sure that everyone knows about the Event beforehand.
-
-Also, think of a Nudge being created out of an User Interface. This User Interface must use the previously created Events to create announcements,notifications or invitations(Nudges) about those Events.
-
-1. Nudges can be created about an Event
-2. A Nudge is made up (composed) of Event & Event Type
-3. A nudge has a cover image
-4. A nudge has a title
-5. A nudge can be scheduled to be sent on at certain time
-6. A nudge has an icon & invitation line which can be used while viewing a minimized version of a nudge.
-
-#### CRUD Operations regarding photo & photo upload
-##### upload photo(meaning add a photo for first time)
-1. It's important to note that photo  is uploaded to the cloud via one endpoint(which returns an image url of the photo on the cloud).
-2. This photo which lives on the cloud can be accessed through a url
-3. we store this url in the event document as a string
-  
-##### update photo(change an already uploaded photo)
-
-1. for an Event the endpoint is /images/{id}/upload-image
-2. the id refers to the event id of which we want to change the image
-3. upload the image to this endpoint
-4. the image is updated
-5. detailed flow can be understood by looking at my code
-
-##### delete photo
-
-1. A photo can be deleted only by deleting an event.
-2. this is done so that no event ever remains on database without an image.
-
-#### The CRUD operations on Nudge cover image can be performed just like the CRUD operations Event photo/image
-
-
-### Task 2 Explanation
-
-1. By looking at the endpoints in the documentation, it must be extremely clear regarding how I thought 
-    about Nudges. It might not be the best way to think about Nudges, but it makes a lot of sense(at least to me.)
-2. Task 2 also showed a UI which helped me a lot to relate it to a real-life situation.
-3. I also attempted to build the UI with Ant Design System and also a succeeded in doing so. But I      abandoned the plan later because I was not much familiar with Ant Design and some Select    Component features were not easy to customize.
+8. But why I want to write my reusbale code? The ability to write reusable code can help me build my own libraries & frameworks.

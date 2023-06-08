@@ -1,6 +1,6 @@
 ### Important Note :
 
-1. Almost 90% MYSQL code is inside the routes/eventRoutes.js
+1. Almost 90% MYSQL code is inside the routes/eventRoutes.js. To see my MONGODB CODE, GO TO : https://github.com/mkpgtr/DeepThought_NudgeAPI
 2. I will repeat the same process in other routes
 3. That's why I uploaded this old code along with the new one (in routes/eventRoutes.js) to explain my thought process regarding how I am converting mongoose(mongodb) code to mysql2(mysql).  
 4. So most of the recent changes I have made are inside routes/eventRoutes.js

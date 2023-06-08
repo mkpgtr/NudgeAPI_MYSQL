@@ -85,7 +85,7 @@
 
 4. Building small things with attention to detail, help me reach conclusions which are reusbale. That's why I am excited about small programs and concepts. They enlighten me. 
 
-5. Being from a non-CS background, I guess my brain has not registered & associated the boring feelings to interesting concepts. Most of my friends I know & meet are not interested in OOPs concepts & UML Diagrams OR Entity Relationships Diagrams.
+5. Being from a non-CS background, I guess my brain has not registered & associated the boring feelings to interesting concepts. Most of my friends I know & meet are not interested in OOPs concepts & UML Diagrams OR Entity Relationships Diagrams. Some of them told me that they were taught these subjects only to pass the exam so they never investigated it much.
 
 6. It's very important to be able to use pre-written libraries because they make our development process faster. But being able to write reusable code is far more joyful. Analogy : It is easy to play a tune which is already composed. You know the chords because you have searched on Google. You can play that song in live shows & people will clap for you. But when you attempt to compose an original song that is as beautiful, you need to study hard(prodigies AND geniuses excluded) OR experiment intensely. That's the same with computer science also.
 

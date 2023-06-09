@@ -75,7 +75,7 @@
 2. how to send array from the frontend & store the attendees on a different table with two columns(event_id & attendee_id). (how to store attendees for an event)
  3. how to update only certain fields. I ran into terrible problems like updating the entire table with one value.
  4. The strangest of all problems I faced was : updating an event with attendees. I executed the sql query inside a for loop to iterate over the array & innocently assumed that I will update the attendees table. But I was always getting all event_id columns being populated with the last element in the array.
- Then I figured out that in the last iteration, SQL is populating all event_ids with with the last element in the array & it instantly made sense. That's when I wrote a separate if statment
+ Then I figured out that in the last iteration, SQL is populating all event_ids with with the last element in the array & it instantly made sense. That's when I wrote a separate if statement to first delete all existing event_id(s) that need to be updated. Once they are deleted, I will re-insert the attendees with the for loop which I used while inserting attendees in the post request. And if the attendees array comes as blank from the frontend(or Postman), then I will delete all the data
  
 ### New things I learnt while building this assignment:
 

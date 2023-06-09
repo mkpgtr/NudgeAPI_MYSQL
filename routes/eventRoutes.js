@@ -215,12 +215,21 @@ router.put('/:id',async(req,res)=>{
         // find if the event already exists or not
 
         const resultExists = await pool.query(`select * from events where id = ?`,[id])
+
+
         if(!resultExists[0].length > 0){
             return res.status(404).json({message:"No such event exists"})
         }
+
+       
     
         const result = await pool.query(`update events set category=?, subcategory=?,moderator=?,name=?,rigor_rank=?,timingsFrom=?,timingsTo=?,imageURL=?,tagline=? where id=${id}`,[category ? category : resultExists[0][0].category,subcategory ? subcategory : resultExists[0][0].subcategory,moderator ? moderator : resultExists[0][0].moderator,name ? name :resultExists[0][0].name,rigor_rank ? rigor_rank : resultExists[0][0].rigor_rank,timingsFrom ? timingsFrom : resultExists[0][0].timingsFrom,timingsTo ? timingsTo : resultExists[0][0].timingsTo,imageURL ? imageURL : resultExists[0][0].imageURL,tagline ? tagline : resultExists[0][0].tagline])
     
+
+        // it means that the user does not want to update the attendees
+        if(!attendees){
+            return res.status(201).json({message:"event updated successfully & attendees was not passed so attendees were not updated"})
+        }
         console.log(attendees)
     
 
@@ -245,8 +254,9 @@ router.put('/:id',async(req,res)=>{
             
             await pool.query(`insert into attendees (event_id,attendee_id) values(?,?)`,[id,attendees[i]])
         }
-    }else{
-        // if the user passes an empty array, then delete all the attendees from that event
+    }
+    // if the user passes an empty array, then delete all the attendees from that event
+    else if(attendees.length===0){
         await pool.query(`delete from attendees where event_id=?`,[id])
     }
     // so if you see moderator's id in attendee list, just know that it was done for easier testing purposes

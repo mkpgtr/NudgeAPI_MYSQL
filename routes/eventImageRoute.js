@@ -32,9 +32,9 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
 
     try {
         const {id} = req.params;
-        if(!req.file){
-            return res.status(400).json({message:"no image being sent. please send an image"})
-        }
+       
+        console.log(!req.file,'file is not')
+        
 
         const previousImage = await pool.query(`select imageURL from events where id = ?`,[id])
 
@@ -45,13 +45,16 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
         // this will pick the first object in the array previousImage[0]
         const url = previousImage[0][0].imageURL.startsWith('https:')
 
+        console.log(url)
         if(!url){
             return res.status(400).json({message:"no image is present in the database already. please upload it via upload route & update the event's imageURL through the update event ROUTE"})
         }
+        // it means the user does not want to update the image
+        
     
         const getPublicId = (imageUrl) => imageUrl.split("/").pop().split(".")[0];
 
-        await cloudinaryConfig.uploader.destroy(`deepthought-events/`+getPublicId(url))
+        await cloudinaryConfig.uploader.destroy(`deepthought-events/`+getPublicId(previousImage[0][0].imageURL))
 
         const response = await cloudinaryConfig.uploader.upload(req.file.path,{
                 folder:'deepthought-events'

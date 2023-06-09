@@ -39,16 +39,22 @@ router.get('/', async (req, res) => {
                 // but this looping and adding keys to objects was entirely done by me.
                 // I used this map function a lot while building social media twitter-like app to extract objectIds into an array
 
+
+                // if the category id in the categories table matches the category id in the events table
+                // it means that this category is the category of that particular row in the events table
+                
                 result[0][i].category = categoryQuery[0].map((category)=>{
                     if(category.id === result[0][i].category){
-                        return category.name
+                        // sending number back to frontend
+                        return category.id 
                     }
                 }).filter(function (val) { return val !== null; }).join("")
-
+                
                 result[0][i].attendees = attendeesResult[0]
                 result[0][i].subcategory = SubCategoryJoin[0].map((singleCategory) => {
                     if (singleCategory.id === result[0][i].subcategory) {
-                        return singleCategory.name
+                        // sending number back to frontend
+                        return singleCategory.id 
                     }
                     else {
                         return
@@ -60,7 +66,7 @@ router.get('/', async (req, res) => {
                 result[0][i].moderator = moderatorQuery[0].map((singleModerator) => {
                     console.log(singleModerator.id, result[0][i].subcategory)
                     if (singleModerator.id === result[0][i].moderator) {
-                        return singleModerator.name
+                        return singleModerator.id
                     }
                     else {
                         return
@@ -148,7 +154,6 @@ router.get('/', async (req, res) => {
 
             result[0][i].attendees = attendeesResult[0]
             result[0][i].subcategory = SubCategoryJoin[0].map((singleCategory) => {
-                console.log(singleCategory.id, result[0][i].subcategory)
                 if (singleCategory.id === result[0][i].subcategory) {
                     return singleCategory.name
                 }
@@ -165,7 +170,6 @@ router.get('/', async (req, res) => {
                 }
             }).filter(function (val) { return val !== null; }).join("")
             result[0][i].moderator = moderatorQuery[0].map((singleModerator) => {
-                console.log(singleModerator.id, result[0][i].subcategory)
                 if (singleModerator.id === result[0][i].moderator) {
                     return singleModerator.name
                 }
@@ -224,13 +228,11 @@ router.post('/', async (req, res) => {
             return res.json({message:`no such category by ${category} exists in database`})
         }
         // 
-        // console.log({...req.body,moderator:parseInt(req.body.moderator),category:parseInt(req.body.category),subcategory:parseInt(req.body.subcategory),rigor_rank:parseInt(req.body.rigor_rank)})
         if(!attendees){
             return res.status(400).json({message:"please provide attendees array"})
         }
         const result = await pool.query('insert into events (category,subcategory,moderator,name,rigor_rank,timingsFrom,timingsTo,imageURL,tagline) values (?,?,?,?,?,?,?,?,?)', [category, subcategory, moderator, name, rigor_rank, timingsFrom, timingsTo, imageURL, tagline])
 
-        // console.log(result[0])
 
         const lastAddedId = result[0].insertId
 
@@ -261,9 +263,38 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { category, attendees, subcategory, moderator, name, rigor_rank, timingsFrom, timingsTo, imageURL, tagline } = req.body;
 
         // find if the event already exists or not
+        let { category, attendees,
+             subcategory, moderator, name, rigor_rank, 
+             timingsFrom, timingsTo, imageURL, tagline } = req.body;
+             // data from frontend comes as string, so convert it into integer
+             moderator = parseInt(moderator)
+             subcategory = parseInt(subcategory)
+             rigor_rank = parseInt(rigor_rank)
+             category = parseInt(category)
+             console.log(req.body)
+
+        if(!category ||  ! subcategory || !moderator || !name || !rigor_rank || !timingsFrom || !timingsTo || !imageURL || !tagline ){
+            return res.status(400).json({message:"Please provide all the values to create an event"})
+        }
+
+      
+        const moderatorExists = await pool.query('select * from users where id=?',[moderator])
+        const subcategoryExists = await pool.query('select * from subcategory where id=?',[subcategory])
+        const categoryExists = await pool.query('select * from categories where id=?',[category])
+
+        if(!moderatorExists[0].length > 0){
+            return res.status(404).json({message:`no such moderator by ${moderator} exists in database`})
+        }
+        if(!subcategoryExists[0].length > 0){
+            return res.status(400).json({message:`no such subcategory by ${subcategory} exists in database`})
+        }
+        if(!categoryExists[0].length > 0){
+            return res.status(400).json({message:`no such category by ${category} exists in database`})
+        }
+        // 
+      
 
         const resultExists = await pool.query(`select * from events where id = ?`, [id])
 
@@ -281,7 +312,6 @@ router.put('/:id', async (req, res) => {
         if (!attendees) {
             return res.status(201).json({ message: "event updated successfully & attendees was not passed so attendees were not updated" })
         }
-        console.log(attendees)
 
 
         //  once we add an event, we get its id and then we iterate over each element in the attendees array

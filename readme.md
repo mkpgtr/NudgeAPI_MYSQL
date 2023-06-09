@@ -34,6 +34,10 @@
 6. Upload & Update Event Images
 7. Error Handling (Although I'm still checking at which places I have missed handling errors)
 
+### New status code I used for the first time :
+
+1. 409 : 409 status code means CONFLICT. I used it when I had to throw an error message when something is already existing. When a NUDGE is already existing about an EVENT, then there is no need to add another NUDGE about that same event. Right? that's when I felt it is appropriate to use status code 409.
+
 ### Features pending(work in progress):
 
 1. Get single nudge

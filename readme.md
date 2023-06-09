@@ -1,11 +1,12 @@
 ### Important Note :
 
-1. Almost 90% MYSQL code is inside the routes/eventRoutes.js. To see my MONGODB CODE, GO TO : https://github.com/mkpgtr/DeepThought_NudgeAPI
+1. To see the mongodb version of this code, please go to : https://github.com/mkpgtr/DeepThought_NudgeAPI
 2. I will repeat the same process in other routes
-3. That's why I uploaded this old code along with the new one (in routes/eventRoutes.js) to explain my thought process regarding how I am converting mongoose(mongodb) code to mysql2(mysql).  
+3. I have removed almost all of the mongoDB code & only MySQL code remains. However, I am still checking if some file has mongoDB code still present. I am also going to remove the dependencies in the package.json file.  
 4. So most of the recent changes I have made are inside routes/eventRoutes.js
 5. I have tried to be as open as possible while writing comments because that will give the evaluator an accurate idea of my thought process & why I am doing things a certain way. 
 6. And it will also help the evaluator in knowing which level I am currently at.
+
 
 ### Important Screenshots :
 
@@ -46,6 +47,13 @@
 ### Features that I missed :
 1. uid column in the event table.
 
+### I need help with : 
+
+1. the route that deals with events pagination & sort by recent events. My code is so messy. I have violated DRY (do not repeat yoursef) principle.
+2. Optimizing other sql queries & best practices in SQL.
+3. createPool error handling. when database connection fails, how can I throw error if I am using createPool & not createConnnection. I found the code for createConnection but not createPool.
+
+
 **without phpmyadmin this would not have been possible. The GUI(Graphical User Interface) helped me visualize solutions in terms of tables(instead of mongodb Document Objects)**
 
 
@@ -77,8 +85,14 @@
 
 4. I also found out that if we try creating relationships between table rows with inconsistent data types then we will get an error. This took a lot of my time while I was starting out.
 
-5. My experience while building this API was phenomenal. I did very simple things but I enjoyed it a lot. Being able to connect my php+mysql training to something like this was very enlightening. I also felt that development can be fun when we are able to connect small things with other small things.
 
+### Some realizations : 
 
+5. My experience while building this API was phenomenal. I did very simple things but I enjoyed it a lot. Being able to connect my php+mysql training to something like this was very enlightening. I also felt that development can be fun when we are able to connect small things with other small things. I long for these connections. In an age of chatGPT, if I am able to connect things well, I will be able to build things without getting frustrated when errors appear.
+
+6. Writing SQL queries is a crucial skill. Although I did write SQL queries that SELECT,DELETE AND UPDATE data, I learnt that I need to work on my SQL querying in order to write(or read) long sql queries.
+
+7. I write long notes because they help me connect my train of thoughts. Sometimes they help me in applying the Feynmann Technique on myself!
+ 
 
 ============================================================================

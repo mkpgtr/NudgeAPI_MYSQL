@@ -43,7 +43,7 @@ app.use(`/${base_url}/images`,eventImageRoute)
 
 
 
-const port = process.env.PORT || 5000
+const port = process.env.SERVER_PORT || 5000
 
 app.listen(5000,()=>{
     console.log(`app is running on port ${port}`)

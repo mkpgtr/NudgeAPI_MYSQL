@@ -5,6 +5,7 @@ const app = express()
 const YAML = require('yamljs');
 const helmet = require('helmet')
 const xss = require('xss-clean')
+const multer = require('multer')
 const rateLimiter = require('express-rate-limit')
 const swaggerDocument = YAML.load('./swagger.yaml');
 const swaggerJsDoc = require('swagger-jsdoc')
@@ -32,8 +33,20 @@ app.use(cors())
 app.use(express.json())
 app.use(helmet())
 app.use(xss())
+const storage = multer.diskStorage({
+    filename:(req,file,cb)=>{
+        cb(null,Date.now() + file.originalname);
+    }
+});
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
+
+app.post('/',multer({storage}).single('image'),(req,res)=>{
+    console.log({...req.body,moderator:parseInt(req.body.moderator),category:parseInt(req.body.category),subcategory:parseInt(req.body.subcategory),rigor_rank:parseInt(req.body.rigor_rank)})
+    
+    console.log(moderator,'moderator')
+    res.send('slash route')
+})
 
 app.use(`/${base_url}/events`,eventRoutes)
 app.use(`/${base_url}/nudge`,nudgeRoutes)

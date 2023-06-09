@@ -32,6 +32,7 @@
 4. Pagination & Sort Recent Posts
 5. Upload & Update NUDGE CoverImage
 6. Upload & Update Event Images
+7. Error Handling (Although I'm still checking at which places I have missed handling errors)
 
 ### Features pending(work in progress):
 

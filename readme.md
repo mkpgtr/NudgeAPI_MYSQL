@@ -30,15 +30,16 @@
 2. Get All Events
 3. Get An Event By ID
 4. Pagination & Sort Recent Posts
+5. Upload & Update NUDGE CoverImage
+6. Upload & Update Event Images
 
 ### Features pending(work in progress):
 
-1. CRUD regarding NUDGES
-2. Upload & Update photo
-3. Update event & Delete Event
+1. Get single nudge
+2. Some routes in routes/userRoutes.js
 
 ### Features that I missed :
-1. uid column in the event table, will add it later once I am done with other more important things related to NUDGES & image uploading. 
+1. uid column in the event table.
 
 **without phpmyadmin this would not have been possible. The GUI(Graphical User Interface) helped me visualize solutions in terms of tables(instead of mongodb Document Objects)**
 
@@ -70,5 +71,9 @@
 3. I also discovered that UNCHECKING(disabling) the ENABLE FOREIGN KEY CHECKS does not throw an error when we delete parent rows & this might lead to inconsistent data.
 
 4. I also found out that if we try creating relationships between table rows with inconsistent data types then we will get an error. This took a lot of my time while I was starting out.
+
+5. My experience while building this API was phenomenal. I did very simple things but I enjoyed it a lot. Being able to connect my php+mysql training to something like this was very enlightening. I also felt that development can be fun when we are able to connect small things with other small things.
+
+
 
 ============================================================================

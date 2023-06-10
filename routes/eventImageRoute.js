@@ -26,6 +26,8 @@ router.post('/upload-image',multer({storage}).single('image'), async(req,res)=>{
     }
 })
 
+
+
 router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=>{
 
  
@@ -49,7 +51,7 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
             return res.status(400).json({message:"no image is present in the database already. please upload it via upload route & update the event's imageURL through the update event ROUTE"})
         }
         // it means the user does not want to update the image
-        
+        // the file is not coming from frontend and the database already contains cloudinary link
         if(!req.file && previousImage[0][0].imageURL){
             return res.status(200).json({data:''})
         }

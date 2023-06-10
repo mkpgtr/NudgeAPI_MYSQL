@@ -12,6 +12,7 @@ const pool = require('../mysql-config/mysql-credentials');
 
 router.get('/', async (req, res) => {
 
+    
     try {
         let { id, limit, page, type } = req.query
        

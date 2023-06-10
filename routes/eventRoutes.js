@@ -64,7 +64,6 @@ router.get('/', async (req, res) => {
                 }).filter(function (val) { return val !== null; }).join("")
 
                 result[0][i].moderator = moderatorQuery[0].map((singleModerator) => {
-                    console.log(singleModerator.id, result[0][i].subcategory)
                     if (singleModerator.id === result[0][i].moderator) {
                         return singleModerator.id
                     }
@@ -92,11 +91,9 @@ router.get('/', async (req, res) => {
 
             skip = (page - 1) * limit
 
-            console.log(skip, 'skip')
 
             let result = await pool.query(`select * from events order by createdAt desc limit ${skip},${limit} `)
 
-            console.log(result[0].length)
             for (var i = 0; i < result[0].length; i++) {
                 // https://stackoverflow.com/questions/48652138/mysql-storing-ids-as-an-array-in-a-table
 
@@ -108,7 +105,6 @@ router.get('/', async (req, res) => {
 
                 result[0][i].attendees = attendeesResult[0]
                 result[0][i].subcategory = SubCategoryJoin[0].map((singleCategory) => {
-                    console.log(singleCategory.id, result[0][i].subcategory)
                     if (singleCategory.id === result[0][i].subcategory) {
                         return singleCategory.name
                     }
@@ -120,7 +116,6 @@ router.get('/', async (req, res) => {
                 }).filter(function (val) { return val !== null; }).join("")
 
                 result[0][i].moderator = moderatorQuery[0].map((singleModerator) => {
-                    console.log(singleModerator.id, result[0][i].subcategory)
                     if (singleModerator.id === result[0][i].moderator) {
                         return singleModerator.name
                     }
@@ -273,16 +268,17 @@ router.put('/:id', async (req, res) => {
              subcategory = parseInt(subcategory)
              rigor_rank = parseInt(rigor_rank)
              category = parseInt(category)
-             console.log(req.body)
 
         if(!category ||  ! subcategory || !attendees || !moderator || !name || !rigor_rank || !timingsFrom || !timingsTo || !imageURL || !tagline ){
             return res.status(400).json({message:"Please provide all the values to create an event"})
         }
         // attendees is coming as string from the frontend form
+        // so I first split it (convert it into an array)
+        // and then I use my favorite map method to do the same thing I have been doing all through out this project
+        // to extract particular values 
         attendees = attendees.split(',').map((attendee)=>{
             return parseInt(attendee)
         })
-        console.log(attendees)
       
         const moderatorExists = await pool.query('select * from users where id=?',[moderator])
         const subcategoryExists = await pool.query('select * from subcategory where id=?',[subcategory])

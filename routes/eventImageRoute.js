@@ -33,7 +33,6 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
     try {
         const {id} = req.params;
        
-        console.log(req.file,'file is not')
         
         
 
@@ -46,7 +45,6 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
         // this will pick the first object in the array previousImage[0]
         const url = previousImage[0][0].imageURL.startsWith('https:')
 
-        console.log(url)
         if(!url){
             return res.status(400).json({message:"no image is present in the database already. please upload it via upload route & update the event's imageURL through the update event ROUTE"})
         }
@@ -66,7 +64,6 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
             const imageUrl = response.secure_url;
 
         const result = await pool.query(`update events set imageURL=? where id=?`,[imageUrl,id])
-        console.log(imageUrl,'from update image route')
 
             res.status(200).json({message:"image updated successfully",data:imageUrl,success:true})
     } catch (error) {

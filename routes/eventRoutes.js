@@ -275,10 +275,14 @@ router.put('/:id', async (req, res) => {
              category = parseInt(category)
              console.log(req.body)
 
-        if(!category ||  ! subcategory || !moderator || !name || !rigor_rank || !timingsFrom || !timingsTo || !imageURL || !tagline ){
+        if(!category ||  ! subcategory || !attendees || !moderator || !name || !rigor_rank || !timingsFrom || !timingsTo || !imageURL || !tagline ){
             return res.status(400).json({message:"Please provide all the values to create an event"})
         }
-
+        // attendees is coming as string from the frontend form
+        attendees = attendees.split(',').map((attendee)=>{
+            return parseInt(attendee)
+        })
+        console.log(attendees)
       
         const moderatorExists = await pool.query('select * from users where id=?',[moderator])
         const subcategoryExists = await pool.query('select * from subcategory where id=?',[subcategory])

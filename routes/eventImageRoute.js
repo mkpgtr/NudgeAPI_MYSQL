@@ -33,7 +33,8 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
     try {
         const {id} = req.params;
        
-        console.log(!req.file,'file is not')
+        console.log(req.file,'file is not')
+        
         
 
         const previousImage = await pool.query(`select imageURL from events where id = ?`,[id])
@@ -51,7 +52,9 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
         }
         // it means the user does not want to update the image
         
-    
+        if(!req.file && previousImage[0][0].imageURL){
+            return res.status(200).json({data:''})
+        }
         const getPublicId = (imageUrl) => imageUrl.split("/").pop().split(".")[0];
 
         await cloudinaryConfig.uploader.destroy(`deepthought-events/`+getPublicId(previousImage[0][0].imageURL))
@@ -63,6 +66,7 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
             const imageUrl = response.secure_url;
 
         const result = await pool.query(`update events set imageURL=? where id=?`,[imageUrl,id])
+        console.log(imageUrl,'from update image route')
 
             res.status(200).json({message:"image updated successfully",data:imageUrl,success:true})
     } catch (error) {

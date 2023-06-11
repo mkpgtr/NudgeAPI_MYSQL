@@ -6,6 +6,40 @@ const cloudinaryConfig = require('../config/cloudinaryConfig.js');
 const pool = require('../mysql-config/mysql-credentials');
 
 
+
+router.post('/sanityCheck',async(req,res)=>{
+
+
+    try {
+        const {attendees,moderator,category,subcategory} = req.body
+    for(let i=0;i<attendees.length;i++){
+        let userFound = await pool.query('select id from users where id=?',[attendees[i]])
+        if(!userFound[0].length > 0){
+            return res.status(404).json({message:"invalid attendee ID entered in attendee array"})
+        }
+       }
+
+        const moderatorExists = await pool.query('select * from users where name=?',[moderator])
+        const subcategoryExists = await pool.query('select * from subcategory where name=?',[subcategory])
+        const categoryExists = await pool.query('select * from categories where name=?',[category])
+
+        if(!moderatorExists[0].length > 0){
+            return res.status(404).json({message:`no such moderator by ${moderator} exists in database`})
+        }
+        if(!subcategoryExists[0].length > 0){
+            return res.status(404).json({message:`no such subcategory by ${subcategory} exists in database`})
+        }
+        if(!categoryExists[0].length > 0){
+            return res.status(404).json({message:`no such category by ${category} exists in database`})
+        }
+    console.log(req.body)
+
+
+     res.status(200).json({message:"sanity check cleared"})
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+})
 // i have done things the brute force way because I have not taken any course on Udemy that uses NodeJs +MYSQL
 
 // I did things in a not-so-messy way in nodeJs + mongoDB because I have taken courses that teach how to do things in a standard way in MERN stack
@@ -196,7 +230,7 @@ router.post('/', async (req, res) => {
             return res.status(400).json({message:"Please provide all the values to create an event"})
         }
 
-        console.log(moderator,subcategory,category)
+        console.log(req.body,'')
         // data from frontend comes as string, so convert it into integer
         // moderator = parseInt(moderator)
         // subcategory = parseInt(subcategory)

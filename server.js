@@ -23,18 +23,18 @@ const cors = require('cors')
 
 
 
+// ! disabled these so that testing can be rapid
 
 
-
-app.set('trust proxy', 1)
-app.use(rateLimiter({ 
-    windowMs:15 * 60 * 1000,
-    max: 100
-}))
+// app.set('trust proxy', 1)
+// app.use(rateLimiter({ 
+//     windowMs:15 * 60 * 1000,
+//     max: 100
+// }))
 app.use(cors())
 app.use(express.json())
-app.use(helmet())
-app.use(xss())
+// app.use(helmet())
+// app.use(xss())
 
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));

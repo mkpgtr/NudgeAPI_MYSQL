@@ -25,8 +25,7 @@ router.get('/:name',async(req,res)=>{
 
     try {
         const result = await pool.query(`select * from categories where name=?`,[req.params.name])
-        console.log(req.params.name)   
-        console.log(result[0][0].id) 
+      
         const result2 = await pool.query(`select * from subcategory where parentCategory=?`,[result[0][0].id])
         res.json({data:result[0],data2:result2[0]})
     } catch (error) {

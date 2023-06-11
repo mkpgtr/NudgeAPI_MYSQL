@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
                 result[0][i].category = categoryQuery[0].map((category)=>{
                     if(category.id === result[0][i].category){
                         // sending number back to frontend
-                        return category.id 
+                        return category.name
                     }
                 }).filter(function (val) { return val !== null; }).join("")
                 
@@ -55,7 +55,7 @@ router.get('/', async (req, res) => {
                 result[0][i].subcategory = SubCategoryJoin[0].map((singleCategory) => {
                     if (singleCategory.id === result[0][i].subcategory) {
                         // sending number back to frontend
-                        return singleCategory.id
+                        return singleCategory.name
                     }
                     else {
                         return
@@ -67,7 +67,8 @@ router.get('/', async (req, res) => {
                 result[0][i].moderator = moderatorQuery[0].map((singleModerator) => {
                     if (singleModerator.id === result[0][i].moderator) {
                         console.log(singleModerator)
-                        return singleModerator.id
+                        // moderator name being sent to frontend inside result[0][i]
+                        return singleModerator.name
                     }
                     else {
                         return
@@ -195,11 +196,12 @@ router.post('/', async (req, res) => {
             return res.status(400).json({message:"Please provide all the values to create an event"})
         }
 
+        console.log(moderator,subcategory,category)
         // data from frontend comes as string, so convert it into integer
-        moderator = parseInt(moderator)
-        subcategory = parseInt(subcategory)
+        // moderator = parseInt(moderator)
+        // subcategory = parseInt(subcategory)
         rigor_rank = parseInt(rigor_rank)
-        category = parseInt(category)
+        // category = parseInt(category)
         
 
         // check if attendee is a user (meaning that if user exists in database or not)
@@ -211,24 +213,24 @@ router.post('/', async (req, res) => {
         }
        }
 
-        const moderatorExists = await pool.query('select * from users where id=?',[moderator])
-        const subcategoryExists = await pool.query('select * from subcategory where id=?',[subcategory])
-        const categoryExists = await pool.query('select * from categories where id=?',[category])
+        const moderatorExists = await pool.query('select * from users where name=?',[moderator])
+        const subcategoryExists = await pool.query('select * from subcategory where name=?',[subcategory])
+        const categoryExists = await pool.query('select * from categories where name=?',[category])
 
         if(!moderatorExists[0].length > 0){
             return res.status(404).json({message:`no such moderator by ${moderator} exists in database`})
         }
         if(!subcategoryExists[0].length > 0){
-            return res.json({message:`no such subcategory by ${subcategory} exists in database`})
+            return res.status(404).json({message:`no such subcategory by ${subcategory} exists in database`})
         }
         if(!categoryExists[0].length > 0){
-            return res.json({message:`no such category by ${category} exists in database`})
+            return res.status(404).json({message:`no such category by ${category} exists in database`})
         }
         // 
         if(!attendees){
             return res.status(400).json({message:"please provide attendees array"})
         }
-        const result = await pool.query('insert into events (category,subcategory,moderator,name,rigor_rank,timingsFrom,timingsTo,imageURL,tagline) values (?,?,?,?,?,?,?,?,?)', [category, subcategory, moderator, name, rigor_rank, timingsFrom, timingsTo, imageURL, tagline])
+        const result = await pool.query('insert into events (category,subcategory,moderator,name,rigor_rank,timingsFrom,timingsTo,imageURL,tagline) values (?,?,?,?,?,?,?,?,?)', [categoryExists[0][0].id, subcategoryExists[0][0].id, moderatorExists[0][0].id, name, rigor_rank, timingsFrom, timingsTo, imageURL, tagline])
 
 
         const lastAddedId = result[0].insertId
@@ -266,10 +268,10 @@ router.put('/:id', async (req, res) => {
              subcategory, moderator, name, rigor_rank, 
              timingsFrom, timingsTo, imageURL, tagline } = req.body;
              // data from frontend comes as string, so convert it into integer
-             subcategory = parseInt(subcategory)
+            //  subcategory = parseInt(subcategory)
              rigor_rank = parseInt(rigor_rank)
-             category = parseInt(category)
-             moderator = parseInt(moderator)
+            //  category = parseInt(category)
+            //  moderator = parseInt(moderator)
 
         if(!category ||  ! subcategory || !attendees || !moderator || !name || !rigor_rank || !timingsFrom || !timingsTo || !imageURL || !tagline ){
             return res.status(400).json({message:"Please provide all the values to create an event"})
@@ -282,9 +284,9 @@ router.put('/:id', async (req, res) => {
             return parseInt(attendee)
         })
       
-        const moderatorExists = await pool.query('select * from users where id=?',[moderator])
-        const subcategoryExists = await pool.query('select * from subcategory where id=?',[subcategory])
-        const categoryExists = await pool.query('select * from categories where id=?',[category])
+        const moderatorExists = await pool.query('select * from users where name=?',[moderator])
+        const subcategoryExists = await pool.query('select * from subcategory where name=?',[subcategory])
+        const categoryExists = await pool.query('select * from categories where name=?',[category])
 
         console.log('moderator exists', moderatorExists[0][0])
         if(!moderatorExists[0].length > 0){
@@ -308,7 +310,7 @@ router.put('/:id', async (req, res) => {
 
 
 
-        const result = await pool.query(`update events set category=?, subcategory=?,moderator=?,name=?,rigor_rank=?,timingsFrom=?,timingsTo=?,imageURL=?,tagline=? where id=${id}`, [category ? category : resultExists[0][0].category, subcategory ? subcategory : resultExists[0][0].subcategory, moderator ? moderator : resultExists[0][0].moderator, name ? name : resultExists[0][0].name, rigor_rank ? rigor_rank : resultExists[0][0].rigor_rank, timingsFrom ? timingsFrom : resultExists[0][0].timingsFrom, timingsTo ? timingsTo : resultExists[0][0].timingsTo, imageURL ? imageURL : resultExists[0][0].imageURL, tagline ? tagline : resultExists[0][0].tagline])
+        const result = await pool.query(`update events set category=?, subcategory=?,moderator=?,name=?,rigor_rank=?,timingsFrom=?,timingsTo=?,imageURL=?,tagline=? where id=${id}`, [category ? categoryExists[0][0].id : resultExists[0][0].category, subcategory ? subcategoryExists[0][0].id : resultExists[0][0].subcategory, moderator ? moderatorExists[0][0].id : resultExists[0][0].moderator, name ? name : resultExists[0][0].name, rigor_rank ? rigor_rank : resultExists[0][0].rigor_rank, timingsFrom ? timingsFrom : resultExists[0][0].timingsFrom, timingsTo ? timingsTo : resultExists[0][0].timingsTo, imageURL ? imageURL : resultExists[0][0].imageURL, tagline ? tagline : resultExists[0][0].tagline])
 
 
         // it means that the user does not want to update the attendees

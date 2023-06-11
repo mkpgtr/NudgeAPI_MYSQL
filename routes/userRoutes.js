@@ -15,10 +15,18 @@ router.post('/',async(req,res)=>{
  }
 })
 
+
+
 // get all users
 
 router.get('/',async(req,res)=>{
 
+    try {
+        const result = await pool.query(`select * from users`)
+        res.status(200).json({data:result[0]})
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
    
 })
 

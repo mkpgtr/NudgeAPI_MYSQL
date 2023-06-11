@@ -12,7 +12,9 @@ const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUI = require('swagger-ui-express')
 const nudgeRoutes = require('./routes/nudgeRoutes.js')
 const userRoutes = require('./routes/userRoutes.js')
-const eventRoutes = require('./routes/eventRoutes.js')
+const categoryRoutes = require('./routes/categoryRoutes.js')
+const subCategoryRoutes = require('./routes/subCategoryRoutes.js')
+const eventRoutes = require('./routes/eventRoutesXP.js')
 const eventImageRoute = require('./routes/eventImageRoute.js')
 const nudgeImageRoutes = require('./routes/nudgeImageRoute.js')
 const base_url = 'api/v3/app'
@@ -40,6 +42,8 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 
 app.use(`/${base_url}/events`,eventRoutes)
+app.use(`/${base_url}/categories`,categoryRoutes)
+app.use(`/${base_url}/subcategories`,subCategoryRoutes)
 app.use(`/${base_url}/nudge`,nudgeRoutes)
 app.use(`/${base_url}/images`,eventImageRoute)
 app.use(`/${base_url}/nudge/image`,nudgeImageRoutes)

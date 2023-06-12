@@ -51,9 +51,9 @@ router.get('/', async (req, res) => {
         let { id, limit, page, type } = req.query
        
 
-        // const result = await pool.query("select * from events")
+        // const result = await pool.query("select id,name,moderator,category,subcategory,rigor_rank,tagline,imageURL,createdAt,timingsFrom,timingsTo from events")
         if (id && !limit && !page && !type) {
-            const result = await pool.query('select * from events where id = ?', [id])
+            const result = await pool.query('select id,name,moderator,category,subcategory,rigor_rank,tagline,imageURL,createdAt,timingsFrom,timingsTo from events where id = ?', [id])
 
             if (!result[0].length > 0) {
                 return res.status(404).json({ message: "No events found" })
@@ -129,7 +129,8 @@ router.get('/', async (req, res) => {
             skip = (page - 1) * limit
 
 
-            let result = await pool.query(`select * from events order by createdAt desc limit ${skip},${limit} `)
+            // ! write all the column names
+            let result = await pool.query(`select id,name,moderator,category,subcategory,rigor_rank,tagline,imageURL,createdAt,timingsFrom,timingsTo from events order by createdAt desc limit ${skip},${limit} `)
 
             for (var i = 0; i < result[0].length; i++) {
                 // https://stackoverflow.com/questions/48652138/mysql-storing-ids-as-an-array-in-a-table
@@ -168,7 +169,7 @@ router.get('/', async (req, res) => {
             return res.json(result[0])
         }
 
-        let result = await pool.query('select * from events')
+        let result = await pool.query('select id,name,moderator,category,subcategory,rigor_rank,tagline,imageURL,createdAt,timingsFrom,timingsTo from events')
 
         if (!result[0].length > 0) {
             return res.status(404).json({ message: "No events found" })
@@ -264,9 +265,10 @@ router.post('/', async (req, res) => {
         if(!attendees){
             return res.status(400).json({message:"please provide attendees array"})
         }
+        // ! prepared statements help preventing sql injection
         const result = await pool.query('insert into events (category,subcategory,moderator,name,rigor_rank,timingsFrom,timingsTo,imageURL,tagline) values (?,?,?,?,?,?,?,?,?)', [categoryExists[0][0].id, subcategoryExists[0][0].id, moderatorExists[0][0].id, name, rigor_rank, timingsFrom, timingsTo, imageURL, tagline])
 
-
+        
         const lastAddedId = result[0].insertId
 
         //  once we add an event, we get its id and then we iterate over each element in the attendees array
@@ -307,16 +309,19 @@ router.put('/:id', async (req, res) => {
             //  category = parseInt(category)
             //  moderator = parseInt(moderator)
 
+            console.log('attendees after sanity check and image upload',attendees)
         if(!category ||  ! subcategory || !attendees || !moderator || !name || !rigor_rank || !timingsFrom || !timingsTo || !imageURL || !tagline ){
             return res.status(400).json({message:"Please provide all the values to create an event"})
         }
+
+        console.log('from line 317 eventroutesXP')
         // attendees is coming as string from the frontend form
         // so I first split it (convert it into an array)
         // and then I use my favorite map method to do the same thing I have been doing all through out this project
         // to extract particular values 
-        attendees = attendees.split(',').map((attendee)=>{
-            return parseInt(attendee)
-        })
+        // attendees = attendees.split(',').map((attendee)=>{
+        //     return parseInt(attendee)
+        // })
       
         const moderatorExists = await pool.query('select * from users where name=?',[moderator])
         const subcategoryExists = await pool.query('select * from subcategory where name=?',[subcategory])
@@ -333,9 +338,12 @@ router.put('/:id', async (req, res) => {
             return res.status(400).json({message:`no such category by ${category} exists in database`})
         }
         // 
-      
 
-        const resultExists = await pool.query(`select * from events where id = ?`, [id])
+        
+        
+        
+        const resultExists = await pool.query(`select id,name,moderator,category,subcategory,rigor_rank,tagline,imageURL,createdAt,timingsFrom,timingsTo  from events where id = ?`, [id])
+        console.log('from line 342 in eventRoutesXP')
 
 
         if (!resultExists[0] || !resultExists[0].length > 0) {
@@ -345,7 +353,6 @@ router.put('/:id', async (req, res) => {
 
 
         const result = await pool.query(`update events set category=?, subcategory=?,moderator=?,name=?,rigor_rank=?,timingsFrom=?,timingsTo=?,imageURL=?,tagline=? where id=${id}`, [category ? categoryExists[0][0].id : resultExists[0][0].category, subcategory ? subcategoryExists[0][0].id : resultExists[0][0].subcategory, moderator ? moderatorExists[0][0].id : resultExists[0][0].moderator, name ? name : resultExists[0][0].name, rigor_rank ? rigor_rank : resultExists[0][0].rigor_rank, timingsFrom ? timingsFrom : resultExists[0][0].timingsFrom, timingsTo ? timingsTo : resultExists[0][0].timingsTo, imageURL ? imageURL : resultExists[0][0].imageURL, tagline ? tagline : resultExists[0][0].tagline])
-
 
         // it means that the user does not want to update the attendees
         if (!attendees) {
@@ -365,13 +372,14 @@ router.put('/:id', async (req, res) => {
         // for the sake of easier testing of this code, I am not checking whether moderators can attend the event or only attendee can attend the event. I am allowing everyone to attend the event.
 
 
+       
         if (attendees.length > 0) {
             // when the user wants to update attendees, the attendees array length will be greater than 0
 
             // first delete all attendees  that belong to this ID
             await pool.query(`delete from attendees where event_id=?`, [id])
             for (let i = 0; i < attendees.length; i++) {
-
+                console.log('inside the for loop',attendees[i])
                 await pool.query(`insert into attendees (event_id,attendee_id) values(?,?)`, [id, attendees[i]])
             }
         }
@@ -393,8 +401,9 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params
-        const eventExists = await pool.query(`select * from events where id=?`, [id])
-        if (!eventExists[0].length > 0) {
+        // ! select count(*)
+        const eventExists = await pool.query(`select count(*) from events where id=?`, [id])
+        if (!eventExists[0][0]['count(*)'] >  0) {
             return res.status(404).json({ message: "no such event exists" })
         }
         const result = await pool.query(`delete from events where id=?`, [id])

@@ -5,13 +5,15 @@ const router = require('express').Router()
 // create an user
 
 
+// ! caching
 
 // get all users
 
 router.get('/',async(req,res)=>{
 
     try {
-        const result = await pool.query(`select * from categories`)
+
+        const result = await pool.query(`select id,name from categories`)
         res.json({data:result[0]})
     } catch (error) {
         res.status(500).json({message:error})

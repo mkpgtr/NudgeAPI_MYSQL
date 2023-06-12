@@ -73,4 +73,38 @@ router.put('/:id/upload-image',multer({storage}).single('image'),async(req,res)=
     }
 })
 
+router.delete('/:id',async(req,res)=>{
+    try {
+        const {id} = req.params;
+       
+        
+        
+
+        const previousImage = await pool.query(`select imageURL from events where id = ?`,[id])
+
+        if(!previousImage[0].length > 0){
+            return res.status(404).json({message:"no such event found"})
+        }
+
+        // this will pick the first object in the array previousImage[0]
+        const url = previousImage[0][0].imageURL.startsWith('https:')
+
+        if(!url){
+            return res.status(400).json({message:"no image is present in the database already. please upload it via upload route & update the event's imageURL through the update event ROUTE"})
+        }
+     
+        const getPublicId = (imageUrl) => imageUrl.split("/").pop().split(".")[0];
+
+        await cloudinaryConfig.uploader.destroy(`deepthought-events/`+getPublicId(previousImage[0][0].imageURL))
+
+       
+
+     
+
+            res.status(200).json({message:"image deleted successfully",success:true})
+    } catch (error) {
+        res.status(500).json({message:error.message,success:false})
+    }
+})
+
 module.exports = router

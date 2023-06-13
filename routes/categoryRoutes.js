@@ -14,6 +14,7 @@ router.get('/',async(req,res)=>{
     try {
 
         const result = await pool.query(`select id,name from categories`)
+        const result1 = await pool.query(`select id,name,moderator,category,subcategory,rigor_rank,tagline,imageURL,createdAt,timingsFrom,timingsTo from events`)
         res.json({data:result[0]})
     } catch (error) {
         res.status(500).json({message:error})

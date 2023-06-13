@@ -4,9 +4,30 @@ const pool = require('../mysql-config/mysql-credentials.js')
 
 const router = require('express').Router()
 
-// create an user
 
+const NodeCache = require('node-cache')
+const cache = new NodeCache()
 
+async function getUsersData() {
+
+    // the key acts like an indentity
+    const cacheKey = `users`;
+  
+    // verify if data exists in cache
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+      console.log('getting cached user data');
+      return cachedData;
+    }
+  
+    // In the first go this query will run
+    const userData = await pool.query(`SELECT * FROM users`);
+  
+    //and then assignn this key to the userData
+    cache.set(cacheKey, userData);
+  
+    return userData;
+  }
 
 
 
@@ -15,12 +36,9 @@ const router = require('express').Router()
 router.get('/',async(req,res)=>{
 
     try {
-        const result0 = await pool.query('select * from events')
-        const result = await pool.query('select id,category,subcategory,moderator,rigor_rank,timingsFrom,timingsTo,tagline,createdAt,imageURL from events')
-         // ! select count(*)
-       const result1 = await pool.query('select count(*) from events')
-       const result2 = await pool.query('select count(*) from persons where personID=1')
-        res.json({data:result2[0][0]['count(*)'] > 0})
+       
+        const result  =  await getUsersData()
+        res.json({data:result[0]})
      
     } catch (error) {
      res.status(500).json({message:error.message})
